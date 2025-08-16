@@ -13,8 +13,6 @@
 // INCLUDES
 /*----------------------------------------------------------------------------*/
 
-#include "dbg.h"
-
 #include <algorithm>
 #include <bitset>
 #include <cassert>
@@ -68,51 +66,6 @@ const int           dx[4]{ 1, 0, -1, 0 }, dy[4]{ 0, 1, 0, -1 };
 /*----------------------------------------------------------------------------*/
 
 namespace custom {
-template <typename T>
-void print( const T &n ) {
-    cerr << n << endl;
-}
-
-template <typename T1, typename T2>
-void print( const pair<T1, T2> &n ) {
-    cerr << "pair = [" << n.first << ", " << n.second << "]" << endl;
-}
-
-template <typename T>
-void print( const vector<T> &n ) {
-    cerr << "vector = [" << endl;
-    bool first = true;
-    for ( const auto &x : n ) {
-        if ( !first ) { cerr << ", " << endl; }
-        cerr << "    " << x;
-        first = false;
-    }
-    cerr << endl << "]" << endl;
-}
-
-template <typename T>
-void print( const unordered_set<T> &n ) {
-    cerr << "unordered_set = {" << endl;
-    bool first = true;
-    for ( const auto &x : n ) {
-        if ( !first ) { cerr << ", " << endl; }
-        cerr << "    " << x;
-        first = false;
-    }
-    cerr << endl << "}" << endl;
-}
-
-template <typename T1, typename T2>
-void print( const unordered_map<T1, T2> &n ) {
-    cerr << "unordered_map = {" << endl;
-    bool first = true;
-    for ( const auto &x : n ) {
-        if ( !first ) { cerr << ", " << endl; }
-        cerr << "    [" << x.first << ", " << x.second << "]";
-        first = false;
-    }
-    cerr << endl << "}" << endl;
-}
 
 template <typename T>
 bool even( T n ) {
@@ -141,28 +94,13 @@ class Subsets {
 /*----------------------------------------------------------------------------*/
 
 using namespace custom;
+
+#include "dbg.h"
+
 int solve( void ) {
 
     long long int n;
     if ( !( cin >> n ) ) { return EXIT_FAILURE; }
-
-    dbg( even( n ) );
-    dbg( odd( n ) );
-    vector<long long int>                       v;
-    unordered_map<long long int, long long int> m;
-    unordered_set<long long int>                s;
-    pair<long long int, long long int>          p{ n, n * 2 };
-
-    while ( n-- ) {
-        v.push_back( n );
-        m[n] = n * 2;
-        s.insert( n );
-    }
-
-    print( v );
-    print( m );
-    print( s );
-    print( p );
 
     return EXIT_SUCCESS;
 } // solve

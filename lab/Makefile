@@ -17,47 +17,42 @@ ERROR:=$(BOLD)$(RED)
 SUCCESS:=$(BOLD)$(GREEN)
 INFO:=$(BOLD)$(CYAN)
 
-CC := clang
-CFLAGS := -std=c2x -Wall -Wextra -Wvla -O1 -g3 -pedantic -v \
-			-fsanitize=address,undefined -fno-omit-frame-pointer \
-			-fno-optimize-sibling-calls -fno-common
+CXX := clang++
+CXXFLAGS := -std=c++20 -Wall -Wextra -Wvla -O1 -g3 -pedantic -v -fsanitize=address,undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls -Wshadow -Wconversion -Wfloat-equal -fno-sanitize-recover -D_GLIBCXX_DEBUG
 DBG := lldb
 LDFLAGS := -v -lc
 
 BUILD_DIRECTORY := build
 
-EXECUTABLE := dynamic_array
+EXECUTABLE := program
 EXEC_PATH := $(BUILD_DIRECTORY)/$(EXECUTABLE)
 
-SRC := $(wildcard *.c)
-HDR := $(wildcard *.h)
-OBJ := $(patsubst %.c, $(BUILD_DIRECTORY)/%.o, $(SRC))
-
+SRCS := $(wildcard *.cpp)
+HDRS := $(wildcard *.h)
+OBJS := $(patsubst %.cpp, $(BUILD_DIRECTORY)/%.o, $(SRCS))
 
 .PHONY: all clean help run check debug
 
 all: $(EXEC_PATH)
 
-$(EXEC_PATH): $(OBJ)
+check:
+	@echo "$(INFO)make check$(RESET)"
+	@which $(CXX) > /dev/null && echo "$(SUCCESS)SUCCESS:$(RESET) $(CXX) is installed" || echo "$(ERROR)ERROR:$(RESET) $(CXX) not found, please install $(CXX)"
+	@which $(DBG) > /dev/null && echo "$(SUCCESS)SUCCESS:$(RESET) $(DBG) is installed" || echo "$(ERROR)ERROR:$(RESET) $(DBG) not found, please install $(DBG)"
+
+$(EXEC_PATH): $(OBJS)
 	@echo "$(INFO)Linking$(RESET) $@ ..."
 	@mkdir -p $(@D)
-	@$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS) && \
+	@$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS) && \
 		echo "$(SUCCESS)SUCCESS$(RESET) Built $@" || \
 		(echo "$(ERROR)ERROR$(RESET) Failed to link $@" && exit 1)
 
-$(BUILD_DIRECTORY)/%.o: %.c
+$(BUILD_DIRECTORY)/%.o: %.cpp
 	@echo "$(INFO)Compiling$(RESET) $< ..."
 	@mkdir -p $(@D)
-	@$(CC) $(CFLAGS) -c $< -o $@ && \
+	@$(CXX) $(CXXFLAGS) -c $< -o $@ && \
 		echo "$(SUCCESS)SUCCESS:$(RESET) Compiled $<" || \
 		(echo "$(ERROR)ERROR$(RESET) Failed to compile $<" && exit 1)
-
-
-check:
-	@echo "$(INFO)make check$(RESET)"
-	@which $(CC) > /dev/null && echo "$(SUCCESS)SUCCESS:$(RESET) $(CC) is installed" || echo "$(ERROR)ERROR:$(RESET) $(CC) not found, please install $(CC)"
-	@which $(DBG) > /dev/null && echo "$(SUCCESS)SUCCESS:$(RESET) $(DBG) is installed" || echo "$(ERROR)ERROR:$(RESET) $(DBG) not found, please install $(DBG)"
-
 
 debug: $(EXEC_PATH)
 	@echo "$(INFO)make debug$(RESET)"
@@ -66,9 +61,8 @@ debug: $(EXEC_PATH)
 
 clean:
 	@echo "$(INFO)make clean$(RESET)"
-	@echo "$(RM) -r $(EXEC_PATH) $(OBJ) $(BUILD_DIRECTORY) *~ *.bak *.dSYM *.out .*.un~"
-	@$(RM) -r $(EXEC_PATH) $(OBJ) $(BUILD_DIRECTORY) *~ *.bak *.dSYM *.out .*.un~
-
+	@echo "$(RM) -r $(EXEC_PATH) $(OBJS) $(BUILD_DIRECTORY) *~ *.bak *.dSYM *.out .*.un~"
+	@$(RM) -r $(EXEC_PATH) $(OBJS) $(BUILD_DIRECTORY) *~ *.bak *.dSYM *.out .*.un~
 
 run: $(EXEC_PATH)
 	@echo "$(INFO)make run$(RESET)"
@@ -77,16 +71,13 @@ run: $(EXEC_PATH)
 	@./$(EXEC_PATH)
 	@make clean
 
-
 help:
 	@echo "$(INFO)make help$(RESET)"
 	@echo "Makefile for Building $(INFO)$(EXECUTABLE)$(RESET)."
 	@echo "Usage:"
 	@echo "  $(MAGENTA)make$(RESET)             — build $(INFO)$(EXECUTABLE)$(RESET)"
 	@echo "  $(MAGENTA)make all$(RESET)         — build $(INFO)$(EXECUTABLE)$(RESET)"
-	@echo "  $(MAGENTA)make check$(RESET)       — dependency check for $(INFO)$(CC)$(RESET) and $(INFO)$(DBG)$(RESET)"
+	@echo "  $(MAGENTA)make check$(RESET)       — dependency check for $(INFO)$(CXX)$(RESET) and $(INFO)$(DBG)$(RESET)"
 	@echo "  $(MAGENTA)make clean$(RESET)       — remove $(INFO)$(BUILD_DIRECTORY)$(RESET) files"
 	@echo "  $(MAGENTA)make debug$(RESET)       — run $(INFO)$(EXECUTABLE)$(RESET) with $(INFO)$(DBG)$(RESET)"
 	@echo "  $(MAGENTA)make run$(RESET)         — run $(INFO)$(EXECUTABLE)$(RESET)"
-
-
