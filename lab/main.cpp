@@ -36,15 +36,12 @@
 #include <utility>
 #include <vector>
 
-using namespace std;
-
 /*----------------------------------------------------------------------------*/
 // FILE INPUT/OUTPUT
 /*----------------------------------------------------------------------------*/
 
 #define IO( NAME )                                                             \
     do {                                                                       \
-        cin.tie( 0 )->sync_with_stdio( 0 );                                    \
         if ( fopen( NAME ".in", "r" ) ) {                                      \
             freopen( NAME ".in", "r", stdin );                                 \
             freopen( NAME ".out", "w", stdout );                               \
@@ -62,45 +59,13 @@ const double        PI    = acos( -1.0 );
 const int           dx[4]{ 1, 0, -1, 0 }, dy[4]{ 0, 1, 0, -1 };
 
 /*----------------------------------------------------------------------------*/
-// Custom Helpers
-/*----------------------------------------------------------------------------*/
-
-namespace custom {
-
-template <typename T>
-bool even( T n ) {
-    return ( n & 1 ) == 0;
-}
-
-template <typename T>
-bool odd( T n ) {
-    return !even( n );
-}
-
-template <typename T>
-class Subsets {
-  private:
-    vector<T> buffer;
-
-  public:
-    Subsets( T k ) {}
-    ~Subsets() {}
-};
-
-} // namespace custom
-
-/*----------------------------------------------------------------------------*/
 // SOLVE
 /*----------------------------------------------------------------------------*/
-
-using namespace custom;
-
-#include "dbg.h"
 
 int solve( void ) {
 
     long long int n;
-    if ( !( cin >> n ) ) { return EXIT_FAILURE; }
+    if ( !( std::cin >> n ) ) { return EXIT_FAILURE; }
 
     return EXIT_SUCCESS;
 } // solve
@@ -110,19 +75,24 @@ int solve( void ) {
 /*----------------------------------------------------------------------------*/
 
 int main( void ) {
-    ios_base::sync_with_stdio( false );
-    cin.tie( NULL );
-    cout.tie( NULL );
+    auto start = std::chrono::high_resolution_clock::now();
+
+    std::ios_base::sync_with_stdio( false );
+    std::cin.tie( NULL );
+    std::cout.tie( NULL );
+
+    // IO("");
 
     int t;
     t = 1;
-    // cin >> t; // Uncomment for multiple test cases
+    // std::cin >> t; // Uncomment for multiple test cases
     for ( int i = 0; i < t; i++ ) {
         if ( solve() ) { break; }
     }
 
-    cerr << endl
-         << "Finished in " << clock() * 1.0 / CLOCKS_PER_SEC << " sec" << endl;
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration = end - start;
+    std::cerr << "Finished in: " << duration.count() << std::endl;
 
     return EXIT_SUCCESS;
 } // main

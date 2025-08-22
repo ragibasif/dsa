@@ -1,5 +1,16 @@
+import functools
+import itertools
+import math
+import operator
+import random
+import re
+import string
 import sys
+from bisect import bisect_left, bisect_right, insort
+from collections import Counter, defaultdict, deque, namedtuple
+from heapq import heapify, heappop, heappush, nlargest, nsmallest
 from os import path
+from typing import Dict, List, Optional, Set, Tuple
 
 
 def solve(n: int, array: list[any]) -> None:
