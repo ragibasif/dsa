@@ -27,3 +27,23 @@ class Solution:
             counter += 1
             j -= 1
         return counter
+
+
+# time: O(N)
+# space: O(1)
+class Solution:
+    def lengthOfLastWord(self, s: str) -> int:
+        # start from the end of input string
+        # iterate until no whitespace
+        # count chars until whitespace
+        counter = 0
+        flag = False
+        for i in range(len(s) - 1, -1, -1):
+            if s[i] == " " and not flag:
+                continue
+            elif s[i] == " " and flag:
+                break
+            else:
+                flag = True
+                counter += 1
+        return counter
