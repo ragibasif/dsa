@@ -1,3 +1,18 @@
+"""
+* File: main.py
+* Author: Ragib Asif
+* GitHub: https://github.com/ragibasif
+* LinkedIn: https://www.linkedin.com/in/ragibasif/
+* SPDX-License-Identifier: MIT
+* Copyright (c) 2025 Ragib Asif
+* Version 1.0.0
+*
+* Problem: 1 - day1
+* Platform: aoc
+* Difficulty: 2015
+* URL: https://adventofcode.com/2015/day/1
+"""
+
 import bisect  # bisect_left, bisect_right, insort
 import collections  # Counter, defaultdict, deque, namedtuple
 import functools
@@ -13,8 +28,15 @@ import sys
 
 
 def solve(src: any) -> None:
-    # YOUR CODE HERE
-    pass
+    # ( - add 1
+    # ) - sub 1
+    floor = 0
+    for item in src:
+        if item == "(":
+            floor += 1
+        else:
+            floor -= 1
+    print(floor)
 
 
 class Input:

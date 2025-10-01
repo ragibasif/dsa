@@ -52,12 +52,12 @@ QUES_PURL="What is the problem URL?"
 
 set_platform() {
     echo "$QUES_PLAT"
-    PLATFORM=$(gum choose codeforces cses leetcode)
+    PLATFORM=$(gum choose aoc codeforces cses leetcode)
 }
 
 set_language() {
     echo "$QUES_PLANG"
-    LANGUAGE=$(gum choose cpp py)
+    LANGUAGE=$(gum choose py cpp)
 }
 
 set_url() {
@@ -92,6 +92,15 @@ cses() {
     PROBLEM_NAME=$(gum input --placeholder "weird_algorithm, missing_number, repetitions, two_sets, etc.")
 }
 
+aoc() {
+    echo "What is the year?"
+    DIFFICULTY=$(gum choose "2025" "2024" "2023" "2022" "2021" "2020" "2019" "2018" "2017" "2016" "2015")
+    echo "$QUES_PID"
+    PROBLEM_ID=$(gum input --placeholder "1, 2, 3, 4, etc.")
+    echo "$QUES_PNAME"
+    PROBLEM_NAME=$(gum input --placeholder "day1, day2, day3, day4, etc.")
+}
+
 eval_platform() {
     case "$PLATFORM" in
     "leetcode")
@@ -102,6 +111,9 @@ eval_platform() {
         ;;
     "cses")
         cses
+        ;;
+    "aoc")
+        aoc
         ;;
     *)
         gum log --time kitchen --structured --level error "Platform is not supported." name "$PLATFORM"
