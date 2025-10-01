@@ -27,7 +27,7 @@ import string
 import sys
 
 
-def solve(src: any) -> None:
+def solve1(src: any) -> None:
     # ( - add 1
     # ) - sub 1
     floor = 0
@@ -37,6 +37,22 @@ def solve(src: any) -> None:
         else:
             floor -= 1
     print(floor)
+
+
+def solve2(src: any) -> None:
+    # ( - add 1
+    # ) - sub 1
+    floor = 0
+    counter = 1
+    for item in src:
+        if item == "(":
+            floor += 1
+        else:
+            floor -= 1
+        if floor == -1:
+            print(counter)
+            return
+        counter += 1
 
 
 class Input:
@@ -62,7 +78,8 @@ def main() -> None:
     # t = int(input.read())  # multiple test case
     for _ in range(t):
         src = input.read()  # inputs in an array
-        solve(src)
+        solve1(src)
+        solve2(src)
     input.file_close()
 
 
