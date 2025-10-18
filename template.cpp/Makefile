@@ -18,7 +18,7 @@ SUCCESS:=$(BOLD)$(GREEN)
 INFO:=$(BOLD)$(CYAN)
 
 CXX := clang++
-CXXFLAGS := -std=c++17 -Wall -Wextra -Wvla -O1 -g3 -pedantic -v -fsanitize=address,undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls -Wshadow -Wconversion -Wfloat-equal -fno-sanitize-recover -D_GLIBCXX_DEBUG
+CXXFLAGS := -std=c++20 -Wall -Wextra -Wvla -O1 -g3 -pedantic -v -fsanitize=address,undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls -Wshadow -Wconversion -Wfloat-equal -fno-sanitize-recover -D_GLIBCXX_DEBUG
 DBG := lldb
 LDFLAGS := -v -lc
 
