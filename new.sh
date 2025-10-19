@@ -137,6 +137,7 @@ create_path() {
     TEMPLATE_DIR="$PWD/template.${LANGUAGE}"
     TEMPLATE_FILE="${TEMPLATE_DIR}/main.${LANGUAGE}"
     TEMPLATE_BUILD="${TEMPLATE_DIR}/Makefile"
+    TEMPLATE_README="${TEMPLATE_DIR}/README.md"
 }
 
 metadata() {
@@ -181,6 +182,7 @@ create_file() {
     fi
     cat "$TEMPLATE_FILE" >>"$FILE_PATH"
     cp "$TEMPLATE_BUILD" "$FILE_DIR"
+    cp "$TEMPLATE_README" "$FILE_DIR"
 
     gum spin --spinner dot --title "Creating $FILE_PATH" -- sleep 1
     echo "$SUCCESS $CYAN$FILE_PATH$RESET is created!"

@@ -46,11 +46,11 @@ using namespace std;
 // CONSTANTS
 /*----------------------------------------------------------------------------*/
 
-const int           MOD   = 1e9 + 7;
-const int           INF   = 1e9;
-const long long int LLINF = 4e18;
-const double        PI    = acos( -1.0 );
-const int           dx[4]{ 1, 0, -1, 0 }, dy[4]{ 0, 1, 0, -1 };
+constexpr int           MOD   = 1e9 + 7;
+constexpr int           INF   = 1e9;
+constexpr long long int LLINF = 4e18;
+const double            PI    = acos( -1.0 );
+constexpr int           dx[4]{ 1, 0, -1, 0 }, dy[4]{ 0, 1, 0, -1 };
 
 /*----------------------------------------------------------------------------*/
 // SOLVE

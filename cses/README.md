@@ -16,7 +16,7 @@
 - [x] [Palindrome Reorder](https://cses.fi/problemset/task/1755\)
 - [ ] [Gray Code](https://cses.fi/problemset/task/2205\)
 - [ ] [Tower of Hanoi](https://cses.fi/problemset/task/2165\)
-- [ ] [Creating Strings](https://cses.fi/problemset/task/1622\)
+- [x] [Creating Strings](https://cses.fi/problemset/task/1622\)
 - [ ] [Apple Division](https://cses.fi/problemset/task/1623\)
 - [ ] [Chessboard and Queens](https://cses.fi/problemset/task/1624\)
 - [ ] [Raab Game I](https://cses.fi/problemset/task/3399\)

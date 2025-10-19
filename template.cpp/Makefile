@@ -1,5 +1,6 @@
 # File: Makefile
 # Author: Ragib Asif
+# Email: ragibasif@tuta.io
 # GitHub: https://github.com/ragibasif
 # LinkedIn: https://www.linkedin.com/in/ragibasif/
 # SPDX-License-Identifier: MIT
@@ -18,9 +19,12 @@ SUCCESS:=$(BOLD)$(GREEN)
 INFO:=$(BOLD)$(CYAN)
 
 CXX := clang++
-CXXFLAGS := -std=c++20 -Wall -Wextra -Wvla -O1 -g3 -pedantic -v -fsanitize=address,undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls -Wshadow -Wconversion -Wfloat-equal -fno-sanitize-recover -D_GLIBCXX_DEBUG
 DBG := lldb
-LDFLAGS := -v -lc
+CXXFLAGS ?= -std=c++20 -Wall -Wextra -Wvla -O1 -g3 -pedantic \
+	-fsanitize=address,undefined -fno-omit-frame-pointer \
+	-fno-optimize-sibling-calls -Wshadow -Wconversion -Wfloat-equal \
+	-fno-sanitize-recover -D_GLIBCXX_DEBUG -MMD -MP
+LDFLAGS  ?= -lc
 
 BUILD_DIRECTORY := build
 
@@ -42,14 +46,14 @@ check:
 
 $(EXEC_PATH): $(OBJS)
 	@echo "$(INFO)Linking$(RESET) $@ ..."
-	@mkdir -p $(@D)
+	@mkdir -p "$(@D)"
 	@$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS) && \
 		echo "$(SUCCESS)SUCCESS$(RESET) Built $@" || \
 		(echo "$(ERROR)ERROR$(RESET) Failed to link $@" && exit 1)
 
 $(BUILD_DIRECTORY)/%.o: %.cpp
 	@echo "$(INFO)Compiling$(RESET) $< ..."
-	@mkdir -p $(@D)
+	@mkdir -p "$(@D)"
 	@$(CXX) $(CXXFLAGS) -c $< -o $@ && \
 		echo "$(SUCCESS)SUCCESS:$(RESET) Compiled $<" || \
 		(echo "$(ERROR)ERROR$(RESET) Failed to compile $<" && exit 1)
@@ -57,19 +61,18 @@ $(BUILD_DIRECTORY)/%.o: %.cpp
 debug: $(EXEC_PATH)
 	@echo "$(INFO)make debug$(RESET)"
 	@echo "$(DBG) ./$(EXEC_PATH)"
-	@$(DBG) ./$(EXEC_PATH)
+	@$(DBG) $(EXEC_PATH)
 
 clean:
 	@echo "$(INFO)make clean$(RESET)"
 	@echo "$(RM) -r $(EXEC_PATH) $(OBJS) $(BUILD_DIRECTORY) *~ *.bak *.dSYM *.out .*.un~"
 	@$(RM) -r $(EXEC_PATH) $(OBJS) $(BUILD_DIRECTORY) *~ *.bak *.dSYM *.out .*.un~
 
-run: $(EXEC_PATH)
+run:
 	@echo "$(INFO)make run$(RESET)"
 	@make clean
 	@make all
 	@./$(EXEC_PATH)
-	@make clean
 
 help:
 	@echo "$(INFO)make help$(RESET)"
@@ -77,7 +80,7 @@ help:
 	@echo "Usage:"
 	@echo "  $(MAGENTA)make$(RESET)             — build $(INFO)$(EXECUTABLE)$(RESET)"
 	@echo "  $(MAGENTA)make all$(RESET)         — build $(INFO)$(EXECUTABLE)$(RESET)"
+	@echo "  $(MAGENTA)make run$(RESET)         — run $(INFO)$(EXECUTABLE)$(RESET)"
 	@echo "  $(MAGENTA)make check$(RESET)       — dependency check for $(INFO)$(CXX)$(RESET) and $(INFO)$(DBG)$(RESET)"
 	@echo "  $(MAGENTA)make clean$(RESET)       — remove $(INFO)$(BUILD_DIRECTORY)$(RESET) files"
 	@echo "  $(MAGENTA)make debug$(RESET)       — run $(INFO)$(EXECUTABLE)$(RESET) with $(INFO)$(DBG)$(RESET)"
-	@echo "  $(MAGENTA)make run$(RESET)         — run $(INFO)$(EXECUTABLE)$(RESET)"
