@@ -144,6 +144,7 @@ metadata() {
     cat >>"$FILE_PATH" <<EOF
  * File: main.${LANGUAGE}
  * Author: Ragib Asif
+ * Email: ragibasif@tuta.io
  * GitHub: https://github.com/ragibasif
  * LinkedIn: https://www.linkedin.com/in/ragibasif/
  * SPDX-License-Identifier: MIT
