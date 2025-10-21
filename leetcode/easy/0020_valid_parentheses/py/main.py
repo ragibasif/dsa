@@ -16,20 +16,30 @@
 
 class Solution:
     def isValid(self, s: str) -> bool:
+        # Time: O(N)
+        # Space: O(1)
         stack = []
+
+        def peek():
+            return stack[-1]
+
+        def empty():
+            return len(stack) == 0
+
+        def push(n):
+            stack.append(n)
+
+        def pop():
+            return stack.pop()
+
+        paren_map = {"(": ")", "[": "]", "{": "}"}
         for i in s:
-            if i == "(" or i == "[" or i == "{":
-                stack.append(i)
+            if i in paren_map:
+                push(i)
             else:
-                if len(stack) == 0:
-                    return False
-                elif stack[-1] == "(" and i == ")":
-                    stack.pop()
-                elif stack[-1] == "[" and i == "]":
-                    stack.pop()
-                elif stack[-1] == "{" and i == "}":
-                    stack.pop()
+                if not empty() and paren_map[peek()] == i:
+                    pop()
                 else:
                     return False
 
-        return len(stack) == 0
+        return empty()

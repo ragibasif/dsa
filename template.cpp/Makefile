@@ -21,7 +21,7 @@ INFO:=$(BOLD)$(CYAN)
 CXX := clang++
 DBG := lldb
 CXXFLAGS ?= -std=c++20 -Wall -Wextra -Wvla -O1 -g3 -pedantic \
-	-fsanitize=address,undefined -fno-omit-frame-pointer \
+	-fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer \
 	-fno-optimize-sibling-calls -Wshadow -Wconversion -Wfloat-equal \
 	-fno-sanitize-recover -D_GLIBCXX_DEBUG -MMD -MP
 LDFLAGS  ?= -lc
