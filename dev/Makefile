@@ -24,7 +24,7 @@ CXXFLAGS ?= -std=c++20 -Wall -Wextra -Wvla -O1 -g3 -pedantic \
 	-fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer \
 	-fno-optimize-sibling-calls -Wshadow -Wconversion -Wfloat-equal \
 	-fno-sanitize-recover -D_GLIBCXX_DEBUG -MMD -MP
-LDFLAGS  ?= -lc
+LDFLAGS  ?= -lc -lm
 
 BUILD_DIRECTORY := build
 
@@ -35,9 +35,13 @@ SRCS := $(wildcard *.cpp)
 HDRS := $(wildcard *.h)
 OBJS := $(patsubst %.cpp, $(BUILD_DIRECTORY)/%.o, $(SRCS))
 
-.PHONY: all clean help run check debug
+.PHONY: all clean help run check debug py
 
 all: $(EXEC_PATH)
+
+py:
+	@uv run generate.py
+
 
 check:
 	@echo "$(INFO)make check$(RESET)"
