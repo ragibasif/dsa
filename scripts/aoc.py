@@ -1,0 +1,38 @@
+#!/usr/bin/env python3
+
+import os
+import datetime
+
+AOC_BASE = "adventofcode"
+AOC_ABBR = "aoc"
+AOC_START_YEAR = 2015
+AOC_CURRENT_YEAR = datetime.datetime.now().year
+AOC_DAYS = 25
+AOC_URL = "https://adventofcode.com"
+AOC_INPUT = "input.txt"
+
+DEFAULT_FILE = "README.md"
+
+
+def aoc_dir():
+    for year in range(AOC_START_YEAR, AOC_CURRENT_YEAR + 1):
+        year_str = str(year)
+        for day in range(1, AOC_DAYS + 1):
+            day_str = f"{day:02d}"
+            dir_path = os.path.join(AOC_ABBR, year_str, day_str)
+            os.makedirs(dir_path, exist_ok=True)
+            filename = os.path.join(dir_path, DEFAULT_FILE)
+            url = f"{AOC_URL}/{year}/day/{day}"
+            with open(filename, "w") as f:
+                f.write(f"# {dir_path}\n\n")
+                f.write(f"Link: [{url}]({url})\n\n")
+            test_file = os.path.join(dir_path, AOC_INPUT)
+            open(test_file, "w").close()
+
+
+def main():
+    aoc_dir()
+
+
+if __name__ == "__main__":
+    main()
