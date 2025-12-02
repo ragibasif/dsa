@@ -51,4 +51,11 @@ debug:
 clean:
 	@rm -rf $(BUILD_DIR)
 
+.PHONY: test
+test:
+	@make clean
+	@make all
+	@./$(TARGET) < input.txt
+	@make clean
+
 

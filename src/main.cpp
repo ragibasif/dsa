@@ -95,41 +95,41 @@ unsigned long long combination( unsigned long long n, unsigned long long k ) {
 }
 
 // https://en.wikipedia.org/wiki/Collatz_conjecture
-void collatz_conjecture(long long n) {
-    std::vector<long long> vec;
-    vec.push_back(n);
-    while (n != 1) {
-        if ((n & 1)== 0) {// even
-            n = n / 2; 
+void collatz_conjecture( long long n ) {
+    std::vector< long long > vec;
+    vec.push_back( n );
+    while ( n != 1 ) {
+        if ( ( n & 1 ) == 0 ) { // even
+            n = n / 2;
         } else { // odd
             n = n * 3 + 1;
         }
-        vec.push_back(n);
+        vec.push_back( n );
     }
-    for (auto &num: vec) {
-        std::cout << num << " ";
-    }
+    for ( auto &num : vec ) { std::cout << num << " "; }
     std::cout << "\n";
 }
 
 // https://en.wikipedia.org/wiki/Summation
-unsigned long long sum_of_first_n_natural_numbers(unsigned long long n) {
-    return (n * (n+1))/2;
+unsigned long long sum_of_first_n_natural_numbers( unsigned long long n ) {
+    return ( n * ( n + 1 ) ) / 2;
 }
 
-unsigned long long sum_of_first_n_odd_natural_numbers(unsigned long long n) {
+unsigned long long sum_of_first_n_odd_natural_numbers( unsigned long long n ) {
     return n * n;
 }
 
-unsigned long long sum_of_first_n_even_natural_numbers(unsigned long long n) {
-    return n * (n+1);
+unsigned long long sum_of_first_n_even_natural_numbers( unsigned long long n ) {
+    return n * ( n + 1 );
 }
 
+bool is_even( long long n ) { return ( n & 1 ) == 0; }
+bool is_odd( long long n ) { return ( n & 1 ) == 1; }
+
 int solve() {
-    unsigned long long n;
+    long long n;
     if ( !( std::cin >> n ) ) { return EXIT_FAILURE; }
     // std::cout << n << "\n";
-    
 
     return EXIT_SUCCESS;
 }
