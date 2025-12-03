@@ -80,6 +80,7 @@ long long euclidean_modulo( long long a, long long b ) {
     return r;
 }
 
+// recursive permutation
 // n choose k: (n!) / (k!) * (n-k)!
 unsigned long long combination( unsigned long long n, unsigned long long k ) {
     if ( n == 0 ) {
@@ -93,6 +94,7 @@ unsigned long long combination( unsigned long long n, unsigned long long k ) {
     }
 }
 
+// recursive factorial
 // 0! = 1
 // 1! = 1
 // 2! = 2 * 1
@@ -115,6 +117,7 @@ unsigned long long sum_of_first_n_even_natural_numbers( unsigned long long n ) {
     return n * ( n + 1 );
 }
 
+// recursive power
 long double power( long double n, long double m ) {
     if ( m == 0 ) {
         return 1;
@@ -127,36 +130,6 @@ long double power( long double n, long double m ) {
 
 bool is_even( long long n ) { return ( n & 1 ) == 0; }
 bool is_odd( long long n ) { return ( n & 1 ) == 1; }
-
-// https://en.wikipedia.org/wiki/Collatz_conjecture
-unsigned long long collatz_conjecture( unsigned long long n ) {
-    std::cout << n << " ";
-    if ( n == 1 ) {
-        return 1;
-    } // base case
-    else if ( ( n & 1 ) == 0 ) { // even
-        return collatz_conjecture( n / 2 );
-    } else { // odd
-        return collatz_conjecture( n * 3 + 1 );
-    }
-}
-
-// check adjacent elements
-// if prev element is greater than next element, add the difference to result
-// time: O(N)
-// space: O(1)
-unsigned long long increasing_array( unsigned long long                n,
-                                     std::vector< unsigned long long > vec ) {
-    unsigned long long result = 0;
-    for ( size_t i = 0; i < vec.size() - 1; i++ ) {
-        if ( vec[i] > vec[i + 1] ) {
-            unsigned long long temp = vec[i] - vec[i + 1];
-            result += temp;
-            vec[i + 1] += temp;
-        }
-    }
-    return result;
-}
 
 int solve() {
     long long n; // int input
@@ -174,7 +147,6 @@ int solve() {
         std::cin >> temp;
         vec.push_back( temp );
     }
-    std::cout << increasing_array( n, vec );
 
     return EXIT_SUCCESS;
 }

@@ -21,3 +21,20 @@ void weird_algorithm( long long n ) {
     std::cout << "\n";
 }
 ```
+
+```cpp
+// recursive implementation
+// https://en.wikipedia.org/wiki/Collatz_conjecture
+unsigned long long collatz_conjecture( unsigned long long n ) {
+    std::cout << n << " ";
+    if ( n == 1 ) {
+        return 1;
+    } // base case
+    else if ( ( n & 1 ) == 0 ) { // even
+        return collatz_conjecture( n / 2 );
+    } else { // odd
+        return collatz_conjecture( n * 3 + 1 );
+    }
+}
+
+```
