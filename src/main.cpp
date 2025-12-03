@@ -134,11 +134,28 @@ unsigned long long collatz_conjecture( unsigned long long n ) {
     if ( n == 1 ) {
         return 1;
     } // base case
-    else if ( is_even( n ) ) {
+    else if ( ( n & 1 ) == 0 ) { // even
         return collatz_conjecture( n / 2 );
-    } else {
+    } else { // odd
         return collatz_conjecture( n * 3 + 1 );
     }
+}
+
+// check adjacent elements
+// if prev element is greater than next element, add the difference to result
+// time: O(N)
+// space: O(1)
+unsigned long long increasing_array( unsigned long long                n,
+                                     std::vector< unsigned long long > vec ) {
+    unsigned long long result = 0;
+    for ( size_t i = 0; i < vec.size() - 1; i++ ) {
+        if ( vec[i] > vec[i + 1] ) {
+            unsigned long long temp = vec[i] - vec[i + 1];
+            result += temp;
+            vec[i + 1] += temp;
+        }
+    }
+    return result;
 }
 
 int solve() {
@@ -151,9 +168,13 @@ int solve() {
     //     return EXIT_FAILURE;
     // }
 
-    long long m; // int input
-    std::cin >> m;
-    std::cout << power( n, m ) << "\n";
+    std::vector< unsigned long long > vec;
+    for ( size_t i = 0; i < n; i++ ) {
+        unsigned long long temp;
+        std::cin >> temp;
+        vec.push_back( temp );
+    }
+    std::cout << increasing_array( n, vec );
 
     return EXIT_SUCCESS;
 }
