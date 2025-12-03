@@ -8,168 +8,150 @@ CF = "cf"
 AOC = "aoc"
 CSES = "cses"
 
-
 PLATFORMS = {LC, CF, AOC, CSES}
-
 README = "README.md"
-
 DATE_TIME = datetime.datetime.now().strftime("%B %d, %Y at %I:%M %p")
 
 
+def ensure_str_collection(collection):
+    """Convert all elements in a collection to strings."""
+    if isinstance(collection, dict):
+        return {str(k): str(v) for k, v in collection.items()}
+    elif isinstance(collection, set):
+        return {str(item) for item in collection}
+    elif isinstance(collection, (list, tuple)):
+        return [str(item) for item in collection]
+    return collection
+
+
+def validate_input(prompt, valid_options, display_name="options"):
+    """Get and validate user input against a set of valid options."""
+    valid_options = ensure_str_collection(valid_options)
+    user_input = input(prompt)
+    while user_input not in valid_options:
+        print(f"Must be one of {sorted(list(valid_options))}")
+        user_input = input(prompt)
+    return user_input
+
+
+def write_readme(filepath, header, link_text, url):
+    """Write or append to a README file."""
+    if os.path.exists(filepath):
+        with open(filepath, "a") as f:
+            f.write(f"- {DATE_TIME}\n")
+    else:
+        with open(filepath, "a") as f:
+            f.write(f"# {header}\n\n")
+            f.write(f"Link: [{link_text}]({url})\n\n")
+            f.write(f"- {DATE_TIME}\n")
+
+
+def create_problem_dir(base_path, problem_info):
+    """Create problem directory and README file."""
+    dir_path = os.path.join(base_path, *problem_info["path_parts"])
+    os.makedirs(dir_path, exist_ok=True)
+    filename = os.path.join(dir_path, README)
+
+    write_readme(
+        filename, problem_info["header"], problem_info["link_text"], problem_info["url"]
+    )
+    print(filename)
+
+
 def leetcode():
-    lc_diff = {"easy", "medium", "hard"}
-    prob_diff = input("Difficulty (easy/medium/hard): ")
-    while prob_diff not in lc_diff:
-        print("Must be one of:")
-        for item in lc_diff:
-            print(item)
-        prob_diff = input("Difficulty (easy/medium/hard): ")
+    lc_difficulties = {"easy", "medium", "hard"}
+    difficulty = validate_input("Difficulty (easy/medium/hard): ", lc_difficulties)
     prob_name = input("Problem name (two_sum/3sum/remove_element): ")
     pid = int(input("Problem ID (1,423,23): "))
     pid_str = f"{pid:04d}"
     url = input("Problem URL: ")
 
-    prob_dir_title = f"{pid_str}_{prob_name}"
-    dir_path = os.path.join("leetcode", prob_diff, prob_dir_title)
-    os.makedirs(dir_path, exist_ok=True)
-    filename = os.path.join(dir_path, README)
-
-    if os.path.exists(filename):
-        with open(filename, "a") as f:
-            f.write(f"- {DATE_TIME}\n")
-    else:
-        with open(filename, "a") as f:
-            f.write(f"# {pid_str}_{prob_name}\n\n")
-            f.write(f"Link: [{pid_str}_{prob_name}]({url})\n\n")
-            f.write(f"- {DATE_TIME}\n")
-    print(f"{filename}")
-
-
-def aoc():
-    aoc_start_year = 2015
-    aoc_current_year = datetime.datetime.now().year
-    aoc_days_total = 25
-
-    aoc_years = set([n for n in range(aoc_start_year, aoc_current_year + 1)])
-    aoc_days = set([n for n in range(1, aoc_days_total + 1)])
-
-    year = int(input("Problem year: "))
-    while year not in aoc_years:
-        print(f"Must be one of {sorted(list(aoc_years))}")
-        year = int(input("Problem year: "))
-
-    day = int(input("Problem day: "))
-    while day not in aoc_days:
-        print(f"Must be one of {sorted(list(aoc_days))}")
-        day = int(input("Problem day: "))
-
-    url = input("Problem URL: ")
-
-    dir_path = os.path.join(AOC, str(year), f"{day:02d}")
-    os.makedirs(dir_path, exist_ok=True)
-    filename = os.path.join(dir_path, README)
-
-    if os.path.exists(filename):
-        with open(filename, "a") as f:
-            f.write(f"- {DATE_TIME}\n")
-    else:
-        with open(filename, "a") as f:
-            f.write(f"# {year}_{day}\n\n")
-            f.write(f"Link: [{year}_{day}]({url})\n\n")
-            f.write(f"- {DATE_TIME}\n")
-    print(f"{filename}")
-
-
-def cses():
-    cses_cats = set(
-        [
-            "introductory_problems",
-            "sorting_and_searching",
-            "dynamic_programming",
-            "graph_algorithms",
-            "range_queries",
-            "tree_algorithms",
-            "mathematics",
-            "string_algorithms",
-            "geometry",
-            "advanced_techniques",
-            "sliding_window_problems",
-            "interactive_problems",
-            "bitwise_operations",
-            "construction_problems",
-            "advanced_graph_problems",
-            "counting_problems",
-            "additional_problems_i",
-            "additional_problems_ii",
-        ]
-    )
-
-    category = input("Problem category: ")
-    while category not in cses_cats:
-        print("Must be one of:")
-        for row in cses_cats:
-            print(row)
-        category = input("Problem category: ")
-    title = input("Problem title: ")
-
-    url = input("Problem URL: ")
-
-    dir_path = os.path.join(CSES, category, title)
-    os.makedirs(dir_path, exist_ok=True)
-    filename = os.path.join(dir_path, README)
-
-    if os.path.exists(filename):
-        with open(filename, "a") as f:
-            f.write(f"- {DATE_TIME}\n")
-    else:
-        with open(filename, "a") as f:
-            f.write(f"# {category}_{title}\n\n")
-            f.write(f"Link: [{category}_{title}]({url})\n\n")
-            f.write(f"- {DATE_TIME}\n")
-    print(f"{filename}")
+    problem_info = {
+        "path_parts": [difficulty, f"{pid_str}_{prob_name}"],
+        "header": f"{pid_str}_{prob_name}",
+        "link_text": f"{pid_str}_{prob_name}",
+        "url": url,
+    }
+    create_problem_dir("leetcode", problem_info)
 
 
 def codeforces():
-    levels = set([chr(i) for i in range(ord("A"), ord("Z") + 1)])
-    level = input("Problem level: ")
-    while level not in levels:
-        print(f"Must be one of {sorted(list(levels))}")
-        level = input("Problem level: ")
+    levels = {chr(i) for i in range(ord("A"), ord("Z") + 1)}
+    level = validate_input("Problem level: ", levels)
     prob_name = input("Problem title: ")
     pid = int(input("Problem ID: "))
     pid_str = f"{pid:05d}"
     url = input("Problem URL: ")
 
     prob_dir_title = f"{pid_str}_{prob_name}"
-    dir_path = os.path.join("codeforces", level, prob_dir_title)
-    os.makedirs(dir_path, exist_ok=True)
-    filename = os.path.join(dir_path, README)
+    problem_info = {
+        "path_parts": [level, prob_dir_title],
+        "header": prob_dir_title,
+        "link_text": prob_dir_title,
+        "url": url,
+    }
+    create_problem_dir("codeforces", problem_info)
 
-    if os.path.exists(filename):
-        with open(filename, "a") as f:
-            f.write(f"- {DATE_TIME}\n")
-    else:
-        with open(filename, "a") as f:
-            f.write(f"# {prob_dir_title}\n\n")
-            f.write(f"Link: [{prob_dir_title}]({url})\n\n")
-            f.write(f"- {DATE_TIME}\n")
-    print(f"{filename}")
+
+def aoc():
+    start_year = 2015
+    current_year = datetime.datetime.now().year
+    years = set(range(start_year, current_year + 1))
+    days = set(range(1, 26))
+
+    year = int(validate_input("Problem year: ", years))
+    day = int(validate_input("Problem day: ", days))
+    url = input("Problem URL: ")
+
+    problem_info = {
+        "path_parts": [str(year), f"{day:02d}"],
+        "header": f"{year}_{day}",
+        "link_text": f"{year}_{day}",
+        "url": url,
+    }
+    create_problem_dir("aoc", problem_info)
+
+
+def cses():
+    cses_categories = {
+        "introductory_problems",
+        "sorting_and_searching",
+        "dynamic_programming",
+        "graph_algorithms",
+        "range_queries",
+        "tree_algorithms",
+        "mathematics",
+        "string_algorithms",
+        "geometry",
+        "advanced_techniques",
+        "sliding_window_problems",
+        "interactive_problems",
+        "bitwise_operations",
+        "construction_problems",
+        "advanced_graph_problems",
+        "counting_problems",
+        "additional_problems_i",
+        "additional_problems_ii",
+    }
+
+    category = validate_input("Problem category: ", cses_categories)
+    title = input("Problem title: ")
+    url = input("Problem URL: ")
+
+    problem_info = {
+        "path_parts": [category, title],
+        "header": f"{category}_{title}",
+        "link_text": f"{category}_{title}",
+        "url": url,
+    }
+    create_problem_dir("cses", problem_info)
 
 
 def main():
-    platform = input("Platform (lc/cf/aoc/cses): ")
-    while platform not in PLATFORMS:
-        platform = input("Platform (lc/cf/aoc/cses): ")
-    if platform == LC:
-        leetcode()
-    elif platform == CF:
-        codeforces()
-    elif platform == AOC:
-        aoc()
-    elif platform == CSES:
-        cses()
-    else:
-        exit(1)
+    platform_map = {LC: leetcode, CF: codeforces, AOC: aoc, CSES: cses}
+
+    platform = validate_input("Platform (lc/cf/aoc/cses): ", PLATFORMS)
+    platform_map[platform]()
 
 
 if __name__ == "__main__":

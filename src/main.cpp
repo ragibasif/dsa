@@ -19,28 +19,29 @@
  *
  */
 
-// #include <algorithm>  // sort, binary_search, lower_bound, shuffle
-// #include <bitset>     // bitset - for binary data
-#include <cassert> // assert - for debugging
-#include <chrono>  // chrono::steady_clock, chrono::system_clock
-#include <climits> // INT_MAX, INT_MIN
-#include <cmath>   // sqrt, pow, abs
-// #include <cstdint>    // int64_t, uint64_t, etc. fixed-width integer types
-// #include <functional> // greater, less, function objects and operations
-#include <iostream> // cout, cin, endl, Input/Output
-// #include <iterator>   // iterators and related items
-// #include <map>     // map, multimap, (non-hashed, tree) ordered key-value
-// pairs #include <numeric> // accumulate, gcd, lcm - numeric operations
-#include <queue> // queue, priority_queue
-// #include <random>  // mt19937, mt19937_64 (higher quality RNG than rand())
-// #include <set>     // set, multiset - (non-hashed, tree) ordered set
-// #include <stack>   // stack
-// #include <string>  // string
-// #include <tuple>   // tuple
-// #include <unordered_map> // unordered_map - hash map
-// #include <unordered_set> // unordered_set - hash set
-// #include <utility>       // pair
-#include <vector> // vector - dynamic array
+#include <algorithm> // sort, binary_search, lower_bound, shuffle
+#include <bitset>    // bitset - for binary data
+#include <cassert>   // assert - for debugging
+#include <chrono>    // chrono::steady_clock, chrono::system_clock
+#include <climits>   // INT_MAX, INT_MIN
+#include <cmath>     // sqrt, pow, abs
+#include <cstdint>   // int64_t, uint64_t, etc. fixed-width integer types
+#include <fstream>
+#include <functional> // greater, less, function objects and operations
+#include <iostream>   // cout, cin, endl, Input/Output
+#include <iterator>   // iterators and related items
+#include <map>     // map, multimap, (non-hashed, tree) ordered key-value pairs
+#include <numeric> // accumulate, gcd, lcm - numeric operations
+#include <queue>   // queue, priority_queue
+#include <random>  // mt19937, mt19937_64 (higher quality RNG than rand())
+#include <set>     // set, multiset - (non-hashed, tree) ordered set
+#include <stack>   // stack
+#include <string>  // string
+#include <tuple>   // tuple
+#include <unordered_map> // unordered_map - hash map
+#include <unordered_set> // unordered_set - hash set
+#include <utility>       // pair
+#include <vector>        // vector - dynamic array
 
 // using namespace std;
 #define IO( NAME )                                                             \
@@ -59,14 +60,12 @@
 [[maybe_unused]] constexpr int           dx[4]{ 1, 0, -1, 0 };
 [[maybe_unused]] constexpr int           dy[4]{ 0, 1, 0, -1 };
 
-/*
- * Euclidean Modulo
- * In C/C++, a % b always returns results with the sign of a
- * Mathematically, modulo is always non-negative
- * % -> remainder operator in C
- * % -> already behaves like Euclidean modulo for unsigned integers
- * returns between [0,n-1], (same behavior of the modulo operator in python)
- */
+// Euclidean Modulo
+// In C/C++, a % b always returns results with the sign of a
+// Mathematically, modulo is always non-negative
+// % -> remainder operator in C
+// % -> already behaves like Euclidean modulo for unsigned integers
+// returns between [0,n-1], (same behavior of the modulo operator in python)
 long long euclidean_modulo( long long a, long long b ) {
     if ( b == 0 ) { return 0; } // b == 0 is Undefined Behavior
     if ( a == INT_MIN && b == -1 ) {
@@ -94,20 +93,13 @@ unsigned long long combination( unsigned long long n, unsigned long long k ) {
     }
 }
 
-// https://en.wikipedia.org/wiki/Collatz_conjecture
-void collatz_conjecture( long long n ) {
-    std::vector< long long > vec;
-    vec.push_back( n );
-    while ( n != 1 ) {
-        if ( ( n & 1 ) == 0 ) { // even
-            n = n / 2;
-        } else { // odd
-            n = n * 3 + 1;
-        }
-        vec.push_back( n );
-    }
-    for ( auto &num : vec ) { std::cout << num << " "; }
-    std::cout << "\n";
+// 0! = 1
+// 1! = 1
+// 2! = 2 * 1
+// 5! = 5 * 4 * 3 * 2 * 1
+unsigned long long factorial( unsigned long long n ) {
+    if ( n == 0 || n == 1 ) { return 1; }
+    return n * factorial( n - 1 );
 }
 
 // https://en.wikipedia.org/wiki/Summation
@@ -123,13 +115,45 @@ unsigned long long sum_of_first_n_even_natural_numbers( unsigned long long n ) {
     return n * ( n + 1 );
 }
 
+long double power( long double n, long double m ) {
+    if ( m == 0 ) {
+        return 1;
+    } else if ( m > 0 ) {
+        return n * power( n, m - 1 );
+    } else {
+        return 1 / power( n, std::abs( m ) );
+    }
+}
+
 bool is_even( long long n ) { return ( n & 1 ) == 0; }
 bool is_odd( long long n ) { return ( n & 1 ) == 1; }
 
+// https://en.wikipedia.org/wiki/Collatz_conjecture
+unsigned long long collatz_conjecture( unsigned long long n ) {
+    std::cout << n << " ";
+    if ( n == 1 ) {
+        return 1;
+    } // base case
+    else if ( is_even( n ) ) {
+        return collatz_conjecture( n / 2 );
+    } else {
+        return collatz_conjecture( n * 3 + 1 );
+    }
+}
+
 int solve() {
-    long long n;
+    long long n; // int input
     if ( !( std::cin >> n ) ) { return EXIT_FAILURE; }
     // std::cout << n << "\n";
+
+    // std::string line; // string input
+    // if ( !( std::getline( std::cin >> std::ws, line ) ) ) {
+    //     return EXIT_FAILURE;
+    // }
+
+    long long m; // int input
+    std::cin >> m;
+    std::cout << power( n, m ) << "\n";
 
     return EXIT_SUCCESS;
 }
@@ -151,7 +175,7 @@ int main( [[maybe_unused]] int argc, [[maybe_unused]] char **argv ) {
     for ( unsigned int i = 0; i < test_cases; i++ ) {
         if ( solve() ) { break; }
     }
-
+    std::cerr << std::endl;
     auto   wc_end = std::chrono::high_resolution_clock::now();
     double wc_duration =
         std::chrono::duration< double, std::milli >( wc_end - wc_start )
