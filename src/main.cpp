@@ -8,15 +8,6 @@
  * Copyright (c) 2025 Ragib Asif
  * Version 1.0.0
  *
- * Description:
- *   Base C++ file for algorithm problems.
- *
- * Notes:
- *   - an n bit unsigned integer has a range of 0 to (2ⁿ)-1
- *   - an n bit signed integer has a range of -(2ⁿ⁻¹) to (2ⁿ⁻¹)-1
- *   - Bit masking is faster than modulus
- *   - Bit shifting is faster than multiplication/division
- *
  */
 
 #include <algorithm> // sort, binary_search, lower_bound, shuffle
@@ -59,30 +50,13 @@
 [[maybe_unused]] const double            PI      = acos( -1.0 );
 [[maybe_unused]] constexpr int           dx[4]{ 1, 0, -1, 0 };
 [[maybe_unused]] constexpr int           dy[4]{ 0, 1, 0, -1 };
+[[maybe_unused]] constexpr size_t        BITSET_MAX_SIZE = 64;
 
-// Euclidean Modulo
-// In C/C++, a % b always returns results with the sign of a
-// Mathematically, modulo is always non-negative
-// % -> remainder operator in C
-// % -> already behaves like Euclidean modulo for unsigned integers
-// returns between [0,n-1], (same behavior of the modulo operator in python)
-long long euclidean_modulo( long long a, long long b ) {
-    if ( b == 0 ) { return 0; } // b == 0 is Undefined Behavior
-    if ( a == INT_MIN && b == -1 ) {
-        return 0;
-    } // mathematically 0 but UB because of overflow
-    long long r = a % b;
-    if ( r < 0 ) {
-        // these two lines are the same: (b > 0 ? : -b) == abs(b)
-        // r += ( b > 0 ? b : -b );
-        r += abs( b );
-    }
-    return r;
-}
+long long euclidean_division( const long long a, const long long b );
 
 // recursive permutation
 // n choose k: (n!) / (k!) * (n-k)!
-unsigned long long combination( unsigned long long n, unsigned long long k ) {
+long long recursive_combination( const long long n, const long long k ) {
     if ( n == 0 ) {
         return 1;
     } else if ( k == 0 ) {
@@ -90,30 +64,26 @@ unsigned long long combination( unsigned long long n, unsigned long long k ) {
     } else if ( n == k ) {
         return 1;
     } else {
-        return combination( n - 1, k - 1 ) + combination( n - 1, k );
+        return recursive_combination( n - 1, k - 1 ) +
+               recursive_combination( n - 1, k );
     }
 }
 
-// recursive factorial
-// 0! = 1
-// 1! = 1
-// 2! = 2 * 1
-// 5! = 5 * 4 * 3 * 2 * 1
-unsigned long long factorial( unsigned long long n ) {
-    if ( n == 0 || n == 1 ) { return 1; }
-    return n * factorial( n - 1 );
-}
+long long recursive_factorial( long long n );
 
 // https://en.wikipedia.org/wiki/Summation
-unsigned long long sum_of_first_n_natural_numbers( unsigned long long n ) {
+unsigned long long
+sum_of_first_n_natural_numbers( const unsigned long long n ) {
     return ( n * ( n + 1 ) ) / 2;
 }
 
-unsigned long long sum_of_first_n_odd_natural_numbers( unsigned long long n ) {
+unsigned long long
+sum_of_first_n_odd_natural_numbers( const unsigned long long n ) {
     return n * n;
 }
 
-unsigned long long sum_of_first_n_even_natural_numbers( unsigned long long n ) {
+unsigned long long
+sum_of_first_n_even_natural_numbers( const unsigned long long n ) {
     return n * ( n + 1 );
 }
 
@@ -128,8 +98,114 @@ long double power( long double n, long double m ) {
     }
 }
 
-bool is_even( long long n ) { return ( n & 1 ) == 0; }
-bool is_odd( long long n ) { return ( n & 1 ) == 1; }
+long long                collatz( long long n );
+std::vector< long long > collatz_sequence( long long n );
+
+bool is_even( long long n );
+bool is_odd( long long n );
+
+class Graph {
+    std::vector< std::vector< int > >          adjacency_list;
+    std::vector< std::pair< int, int > >       adjacency_list_weighted;
+    std::vector< std::vector< int > >          adjacency_matrix;
+    std::vector< std::pair< int, int > >       edge_list;
+    std::vector< std::tuple< int, int, int > > edge_list_weighted;
+
+    std::vector< std::vector< int > > adj;
+    std::vector< bool >               visited;
+    // time: O( V + E)
+    void dfs( int n ) {
+        if ( visited[n] ) { return; }
+        visited[n] = true;
+        // process node n
+        for ( auto u : adj[n] ) { dfs( u ); }
+    }
+
+    // time: O( V + E)
+    void bfs( int n ) {
+        std::vector< std::vector< int > > adj;
+        std::vector< bool >               visited;
+        std::vector< int >                distance;
+        std::queue< int >                 q;
+        visited[n]  = true;
+        distance[n] = 0;
+        q.push( n );
+        while ( !q.empty() ) {
+            int v = q.front();
+            q.pop();
+            // process node v
+            for ( auto u : adj[v] ) {
+                if ( visited[u] ) { continue; }
+                visited[u]  = true;
+                distance[u] = distance[v] + 1;
+                q.push( u );
+            }
+        }
+    }
+
+    void bellman_ford( int n ) {
+        std::vector< int >                         distance;
+        std::vector< std::tuple< int, int, int > > edges;
+        for ( int i = 0; i < n; i++ ) { distance[i] = INF; }
+        distance[n] = 0;
+        for ( int i = 0; i < n - 1; i++ ) {
+            for ( auto e : edges ) {
+                int u, v, w;
+                std::tie( u, v, w ) = e; // tuple unpacking
+                distance[v]         = std::min( distance[v], distance[u] + w );
+            }
+        }
+    }
+};
+
+// XOR gate
+// https://en.wikipedia.org/wiki/XOR_gate
+// must have one or the other but not both
+// 0 XOR 0 == 0
+// 1 XOR 1 == 0
+// 1 XOR 0 == 1
+// 0 XOR 1 == 1
+long long xor_gate( long long a, long long b ) { return a ^ b; }
+
+// https://en.wikipedia.org/wiki/Gray_code
+// https://cses.fi/problemset/task/2205
+// Gray code
+// 2:
+//  00 -> 0 ^ (0 >> 1) -> 00 ^ 00
+//  01 -> 1 ^ (1 >> 1) -> 01 ^ 00
+//  11 -> 2 ^ (2 >> 1) -> 10 ^ 01
+//  10 -> 3 ^ (3 >> 1) -> 11 ^ 01
+// 3:
+//  000
+//  001
+//  011
+//  010
+//  110
+//  111
+//  101
+//  100
+long long gray( long long n ) { return n ^ ( n >> 1 ); }
+// constructing an n-bit gray code (recursive)
+// to generate n bit gray code:
+//  1. take n-1 bit gray code list
+//  2. reflect the list (list entries in reverse order)
+//  3. prefix entries of original list with a binary 0
+//  4. prefix entries of reflected list with a binary 1
+//  5. concatenate original list with the reverse list
+// base case: 0 bits -> empty
+// 1 bit -> (0,1)
+std::vector< std::bitset< BITSET_MAX_SIZE > > gray_code( long long n ) {
+    std::vector< std::bitset< BITSET_MAX_SIZE > > codes;
+    if ( n <= 0 ) { return codes; } // base case, empty vector
+
+    long long size = 1 << n; // 2ⁿ
+    for ( long long i = 0; i < size; i++ ) {
+        long long                      code = gray( i );
+        std::bitset< BITSET_MAX_SIZE > item( code );
+        codes.push_back( item );
+    }
+    return codes;
+}
 
 int solve() {
     long long n; // int input
@@ -141,11 +217,15 @@ int solve() {
     //     return EXIT_FAILURE;
     // }
 
-    std::vector< unsigned long long > vec;
-    for ( size_t i = 0; i < n; i++ ) {
-        unsigned long long temp;
-        std::cin >> temp;
-        vec.push_back( temp );
+    std::vector< std::bitset< BITSET_MAX_SIZE > > gray_codes = gray_code( n );
+    for ( auto item : gray_codes ) {
+        if ( n < item.size() ) {
+            std::string sub = item.to_string().substr( item.size() - n );
+            std::cout << sub << "\n";
+        } else {
+
+            std::cout << item << "\n";
+        }
     }
 
     return EXIT_SUCCESS;
@@ -162,18 +242,71 @@ int main( [[maybe_unused]] int argc, [[maybe_unused]] char **argv ) {
 
     // IO( "test" );
 
-    unsigned int test_cases;
-    test_cases = 1; // Uncomment for single test case
-    // std::cin >> t; // Uncomment for multiple test cases
-    for ( unsigned int i = 0; i < test_cases; i++ ) {
+    unsigned int cases;
+    cases = 1; // Uncomment for single test case
+    // std::cin >> cases; // Uncomment for multiple test cases
+    for ( unsigned int i = 0; i < cases; i++ ) {
         if ( solve() ) { break; }
     }
-    std::cerr << std::endl;
     auto   wc_end = std::chrono::high_resolution_clock::now();
     double wc_duration =
         std::chrono::duration< double, std::milli >( wc_end - wc_start )
             .count();
-    std::cerr << "[Wall Clock] Finished in: " << wc_duration << " milliseconds."
-              << std::endl;
+    std::cerr << "\n[Wall Clock] Finished in: " << wc_duration
+              << " milliseconds.\n"
+              << std::flush;
     return EXIT_SUCCESS;
+}
+
+// https://en.wikipedia.org/wiki/Euclidean_division
+// a = bq + r and 0 <= r < |b|
+// euclidean modulo == euclidean division
+// In C/C++, a % b always returns results with the sign of a
+// Mathematically, modulo is always non-negative
+// % -> remainder operator in C
+// % -> already behaves like Euclidean modulo for unsigned integers
+// returns between [0,n-1], (same behavior of the modulo operator in python)
+long long euclidean_division( const long long a, const long long b ) {
+    if ( b == 0 ) { // b == 0 is Undefined Behavior/Division by zero error
+        return 0;
+    }
+    if ( a == INT_MIN && b == -1 ) {
+        return 0; // mathematically 0 but UB because of overflow
+    }
+    long long r = a % b;
+    if ( r < 0 ) { r += abs( b ); }
+    return r;
+}
+
+// recursive factorial
+// 0! = 1
+// 1! = 1
+// 2! = 2 * 1
+// 5! = 5 * 4 * 3 * 2 * 1
+long long recursive_factorial( long long n ) {
+    if ( n <= 1 ) { return 1; }
+    return n * recursive_factorial( n - 1 );
+}
+
+bool is_even( long long n ) { return ( n & 1 ) == 0; }
+
+bool is_odd( long long n ) { return ( n & 1 ) == 1; }
+
+// https://en.wikipedia.org/wiki/Collatz_conjecture
+long long collatz( long long n ) {
+    if ( ( n & 1 ) == 0 ) { // even
+        return n / 2;
+    }
+    return n * 3 + 1; // odd
+}
+
+std::vector< long long > collatz_sequence( long long n ) {
+    std::vector< long long > vec;
+    long long                seq = n;
+    vec.push_back( seq );
+    while ( seq != 1 ) {
+        seq = collatz( seq );
+        vec.push_back( seq );
+    }
+    return vec;
 }

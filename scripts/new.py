@@ -59,8 +59,8 @@ def create_problem_dir(base_path, problem_info):
 
 
 def leetcode():
-    lc_difficulties = {"easy", "medium", "hard"}
-    difficulty = validate_input("Difficulty (easy/medium/hard): ", lc_difficulties)
+    difficulties = {"easy", "medium", "hard"}
+    difficulty = validate_input("Difficulty (easy/medium/hard): ", difficulties)
     prob_name = input("Problem name (two_sum/3sum/remove_element): ")
     pid = int(input("Problem ID (1,423,23): "))
     pid_str = f"{pid:04d}"
@@ -113,7 +113,7 @@ def aoc():
 
 
 def cses():
-    cses_categories = {
+    categories = {
         "introductory_problems",
         "sorting_and_searching",
         "dynamic_programming",
@@ -134,7 +134,7 @@ def cses():
         "additional_problems_ii",
     }
 
-    category = validate_input("Problem category: ", cses_categories)
+    category = validate_input("Problem category: ", categories)
     title = input("Problem title: ")
     url = input("Problem URL: ")
 
