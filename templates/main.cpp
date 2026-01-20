@@ -1,56 +1,64 @@
-#include <algorithm>
+#pragma GCC optimize("Ofast")
+#pragma GCC target("avx,avx2,fma")
+
 #include <iostream>
-#include <list>
-#include <map>
-#include <stack>
-#include <string>
-#include <vector>
+#include <cstdio>
+#include <iomanip>
 #include <sstream>
-#include <utility>
-#include <unordered_map>
+#include <vector>
+#include <deque>
+#include <list>
+#include <stack>
+#include <queue>
+#include <set>
+#include <map>
 #include <unordered_set>
+#include <unordered_map>
+#include <algorithm>
+#include <numeric>
+#include <cmath>
+#include <complex>
+#include <random>
+#include <string>
+#include <utility>
+#include <tuple>
+#include <chrono>
+#include <bitset>
+#include <functional>
 
 using namespace std;
-using ll = long long; 
-using str = string; 
-using pii = pair<int, int>; 
-using pll = pair<ll, ll>; 
-using vi = vector<int>; 
+
 const int MOD = 1e9 + 7;
 
-#ifndef DEBUG
-#define DEBUG 0
-#endif
+long long gcd(long long a, long long b) { return b == 0 ? a : gcd(b, a % b); }
+long long lcm(long long a, long long b) { return (a / gcd(a, b)) * b; }
 
-#if DEBUG
+#ifndef ONLINE_JUDGE
 #define dbg(x) cerr << "Line(" << __LINE__ << ") -> " << #x << " = " << (x) << endl;
 #else
 #define dbg(x)
 #endif
 
-#define IO(NAME) \
-    ios_base::sync_with_stdio(false);\
-    cin.tie(nullptr); cout.tie(nullptr);\
-    if(fopen(NAME ".in","r")) freopen(NAME ".in","r",stdin), \
-    freopen(NAME ".out","w",stdout); 
-
-void solve() {
+void solve() { 
+    dbg("hello"); 
 }
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(nullptr); cout.tie(nullptr);
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
 
-    IO("");
+    #ifndef ONLINE_JUDGE
+        freopen("input.txt", "r", stdin);
+        freopen("output.txt", "w", stdout);
+    #endif
 
 
-    int tc;
-    cin >> tc;
-    while (tc--) {
+    int t = 1; 
+    //cin >> t;
+    while (t--) {
         solve();
     }
 
     return 0;
 }
-
-
