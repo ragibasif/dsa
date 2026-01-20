@@ -31,7 +31,7 @@ using namespace std;
 const int MOD = 1e9 + 7;
 
 long long gcd(long long a, long long b) { return b == 0 ? a : gcd(b, a % b); }
-long long lcm(long long a, long long b) { return (a / gcd(a, b)) * b; }
+long long lcm(long long a, long long b) { return b * (a / gcd(a, b)); }
 
 #ifndef ONLINE_JUDGE
 #define dbg(x) cerr << "Line(" << __LINE__ << ") -> " << #x << " = " << (x) << endl;
