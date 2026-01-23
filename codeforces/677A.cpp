@@ -91,28 +91,19 @@ template<typename... T> void _dbg(T... args) { ((cerr << args << " "), ...); cer
 #define dbg(...)
 #endif
 
-void solve() {
-    int n;
-    cin >> n;
-    str s;
-    cin >> s;
-    int a=0;
-    int d=0;
-    for (auto const c:s) {
-	if (c == 'A') {
-	    a++;
-	} else{
-	    d++;
-	}
+void solve() { 
+    int n,h;
+    cin >>n >> h;
+    int counter = 0;
+    for (int i = 0; i < n; i++) {
+        int temp;
+        cin >> temp;
+        counter++;
+        if (temp > h){
+            counter++;
+        }
     }
-
-    if (a > d) {
-	cout << "Anton" << '\n';
-    } else if (a < d) {
-	cout << "Danik" << '\n';
-    } else {
-	cout << "Friendship" << '\n';
-    }
+    cout << counter << '\n';
 }
 
 int main() {
