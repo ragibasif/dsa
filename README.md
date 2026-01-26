@@ -10,6 +10,22 @@
 
 ## Notes
 
+![Flowchart](docs/dsa_flowchart.png)
+
+### Asymptotic Complexity
+
+![Big O](docs/dsa_big_o.png)
+
+![Sorting Big O](docs/dsa_sorting_big_o.png)
+
+### Bit Manipulation
+
+- Get i-th bit: `(x >> i) & 1`
+- Set i-th bit: `x | (1 << i)`
+- Clear i-th bit: `x & ~(1 << i)`
+- Check if power of 2: `n > 0 and (n & (n - 1)) == 0`
+- XOR Property: `a ^ a = 0`
+
 ### Math
 
 - Sum of first `n` natural numbers: `( n * ( n + 1 ) ) / 2`
@@ -52,3 +68,6 @@
 - step / next — step through code
 - print var — inspect variables
 - quit — exit debugger
+
+
+
