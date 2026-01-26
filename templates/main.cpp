@@ -53,33 +53,12 @@ using str = string;
 [[maybe_unused]]const ld EPS = 1e-9;
 [[maybe_unused]]const ld PI = acos(-1);
 
-/** 
- 
-int month[]={-1,31,28,31,30,31,30,31,31,30,31,30,31};  //Not Leap Year 
- 
-int dx[]={1,0,-1,0}; 
-int dy[]={0,1,0,-1}; //4 Direction 
- 
-int dx[]={1,1,0,-1,-1,-1,0,1}; 
-int dy[]={0,1,1,1,0,-1,-1,-1};//8 direction 
- 
-int dx[]={2,1,-1,-2,-2,-1,1,2}; 
-int dy[]={1,2,2,1,-1,-2,-2,-1};//Knight Direction (horse) 
- 
-**/ 
-const int dx4[] = {-1, 0, 1, 0}; 
-const int dy4[] = { 0, 1, 0,-1}; 
- 
-const int dx8[] = {-1, 0, 1, 0, -1,-1, 1, 1}; 
-const int dy8[] = { 0, 1, 0,-1, -1, 1,-1, 1}; 
-
 bool is_even(ll n) { return (n & 1) == 0; }
 bool is_odd(ll n) { return (n & 1) != 0; }
 
-
 ll mod(ll a, ll b) { if ( b == 0 || ( a == LLONG_MIN && b == -1 )) { return 0; } ll r = a % b; if ( r < 0 ) { r += llabs( b ); } return r; }
-ll gcd(ll a, ll b) { while (b) { ll c = a; a = b; b = mod(c,b); } return a; }
-ll lcm(ll a, ll b) { return b * (a / gcd(a, b)); }
+ll gcd(ll a, ll b) { while (b) { a = mod(a,b); swap(a,b); } return a; }
+ll lcm(ll a, ll b) { return a / gcd(a, b) * b; }
 
 template<typename A, typename B> ostream& operator<<(ostream &os, const pair<A, B> &p) { return os << '(' << p.first << ", " << p.second << ')'; }
 template<typename T_container, typename T = typename enable_if<!is_same<T_container, string>::value, typename T_container::value_type>::type> ostream& operator<<(ostream &os, const T_container &v) { os << '{'; string sep; for (const T &x : v) os << sep << x, sep = ", "; return os << '}'; }
@@ -92,27 +71,20 @@ template<typename... T> void _dbg(T... args) { ((cerr << args << " "), ...); cer
 #endif
 
 void solve() {
-    int n;
-    cin >> n;
-    str s;
-    cin >> s;
-    int a=0;
-    int d=0;
-    for (auto const c:s) {
-	if (c == 'A') {
-	    a++;
-	} else{
-	    d++;
+    str inp;
+    cin >> inp;
+    int n = 0;
+    int k = 0;
+    char prev = inp[0];
+    for (auto const c : inp ) {
+	if (c == prev) {
+	    k++;
+	} else {
+	    k = 1;
 	}
+	n = max(n,k);
     }
-
-    if (a > d) {
-	cout << "Anton" << '\n';
-    } else if (a < d) {
-	cout << "Danik" << '\n';
-    } else {
-	cout << "Friendship" << '\n';
-    }
+    cout << n << '\n';
 }
 
 int main() {
@@ -134,3 +106,16 @@ int main() {
 
     return 0;
 }
+
+/** 
+int month[]={-1,31,28,31,30,31,30,31,31,30,31,30,31};  //Not Leap Year 
+ 
+int dx[] = {0,1,0,-1}; // 4 directions
+int dy[] = {1,0,-1,0};
+ 
+int dx[]={1,1,0,-1,-1,-1,0,1}; 
+int dy[]={0,1,1,1,0,-1,-1,-1};//8 direction 
+ 
+**/ 
+
+
