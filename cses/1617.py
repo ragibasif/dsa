@@ -4,14 +4,13 @@ import sys
 from io import BytesIO, IOBase
 import math
 
+sys.setrecursionlimit(200000)
 INF = math.inf
 NINF = -math.inf
-MOD = 10**9 + 7
+MOD = int(1e9) + 7
 EPS = 1e-9
 DIRS = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 
-def is_valid(r, r_limit, c, c_limit):
-    return 0 <= r < r_limit and 0 <= c < c_limit
 
 def solve():
     # Read single integer
@@ -24,7 +23,9 @@ def solve():
     # arr = list(map(int, input().split()))
 
     # Your logic here
-    pass
+    n = int(input())
+    print((2 ** n)%MOD)
+
 
 def main():
     flag = False  # multiple test cases
@@ -92,5 +93,4 @@ input = lambda: sys.stdin.readline().rstrip("\r\n")
 # endregion
 
 if __name__ == "__main__":
-    sys.setrecursionlimit(200000)
     main()
