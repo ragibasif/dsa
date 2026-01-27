@@ -94,9 +94,6 @@ def fib(n, level=0):
     return fib(n - 1) + fib(n - 2)
 
 
-@benchmark
-@cache
-@trace
 def solve():
     # Read single integer
     # n = int(input())
@@ -113,7 +110,13 @@ def solve():
 
     # Your logic here
 
-    pass
+    s = input()
+    s = list(s)
+    s.sort()
+    perms = sorted(set(itertools.permutations(s)))
+    print(len(perms))
+    for perm in perms:
+        print("".join(perm))
 
 
 def main():
@@ -124,7 +127,6 @@ def main():
             solve()
     else:
         solve()
-        report(solve)
 
 
 # region fastio

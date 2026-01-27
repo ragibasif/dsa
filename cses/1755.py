@@ -9,9 +9,7 @@ from collections import deque, defaultdict, Counter
 import string
 import time
 import heapq
-import itertools
 from functools import cache, wraps
-
 
 # --- CONSTANTS ---
 
@@ -21,11 +19,8 @@ DEBUG: bool = os.path.exists("debug.txt")
 
 # --- UTILITIES ---
 
-
-def benchmark(func):
-    if not DEBUG:
-        return func
-
+def benchmark(func) :
+    if not DEBUG: return func
     @wraps(func)
     def wrapper(*args, **kwargs):
         wrapper.calls += 1
@@ -39,12 +34,9 @@ def benchmark(func):
     wrapper.duration = 0
     return wrapper
 
-
 def trace(func):
-    if not DEBUG:
-        return func
+    if not DEBUG: return func
     level = 0
-
     @wraps(func)
     def wrapper(*args, **kwargs):
         nonlocal level
@@ -56,47 +48,33 @@ def trace(func):
         level -= 1
         print(f"{indent}+-- return {repr(res)}", file=sys.stderr)
         return res
-
     return wrapper
 
     return wrapper
 
-
-def report(func, res=None):
-    if not DEBUG:
-        return func
+def report(func,res=None):
+    if not DEBUG: return func
     if func.calls:
         print(f"Calls:  {func.calls}", file=sys.stderr)
     if func.duration:
         print(f"Time:  {func.duration:.6f}s", file=sys.stderr)
     if res:
-        print(
-            f"Memory: {sys.getsizeof(res) if res else 0} bytes (return val)",
-            file=sys.stderr,
-        )
-
+        print(f"Memory: {sys.getsizeof(res) if res else 0} bytes (return val)", file=sys.stderr)
 
 def inspect(obj):
     """Prints all non-private attributes of an object."""
     attrs = {k: v for k, v in vars(obj).items() if not k.startswith("_")}
     print(f"Object {type(obj).__name__}: {attrs}")
 
-
 # --- SOLVE ---
 
-
 @benchmark
 @cache
 @trace
-def fib(n, level=0):
-    if n < 2:
-        return n
-    return fib(n - 1) + fib(n - 2)
+def fib(n,level=0):
+    if n < 2: return n
+    return fib(n-1) + fib(n-2)
 
-
-@benchmark
-@cache
-@trace
 def solve():
     # Read single integer
     # n = int(input())
@@ -113,8 +91,47 @@ def solve():
 
     # Your logic here
 
-    pass
+    s = input()
+    freq = Counter(s)
+    l = 0
+    r = len(s) - 1
+    res = ['' for _ in range(len(s))]
+    odd = 0
+    for k,v in freq.items():
+        if v == 0:
+            continue
+        if (v & 1) == 0:
+            while v:
+                res[l] = k
+                res[r] = k
+                l+=1
+                r-=1
+                v-=2
+            freq[k] = 0
+        elif v > 1:
+            odd+=1
+            m = (l+r) // 2
+            res[m] = k
+            v-=1
+            while v:
+                res[l] = k
+                res[r] = k
+                l+=1
+                r-=1
+                v-=2
+            freq[k] = 0
+        else:
+            odd+=1
+            while v:
+                m = (l+r) // 2
+                res[m] = k
+                v-=1
+            freq[k] = 0
 
+    if odd > 1:
+        print("NO SOLUTION")
+    else:
+        print("".join(res))
 
 def main():
     flag: bool = False  # multiple test cases
@@ -124,7 +141,6 @@ def main():
             solve()
     else:
         solve()
-        report(solve)
 
 
 # region fastio
@@ -178,8 +194,7 @@ class IOWrapper(IOBase):
 
 
 sys.stdin, sys.stdout = IOWrapper(sys.stdin), IOWrapper(sys.stdout)
-if DEBUG:
-    atexit.register(sys.stdout.flush)
+if DEBUG: atexit.register(sys.stdout.flush)
 input = lambda: sys.stdin.readline().rstrip("\r\n")
 
 # endregion
