@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import atexit
 import os
 import sys
 from io import BytesIO, IOBase
@@ -8,83 +7,8 @@ import math
 from collections import deque, defaultdict, Counter
 import string
 import time
-import heapq
 from functools import cache, wraps
-from typing import (
-    Any,
-    Tuple,
-    List,
-    Dict,
-    Set,
-    Union,
-    Optional,
-    Callable,
-    TypeVar,
-)
-
-# --- CONSTANTS ---
-
-MOD: int = 10**9 + 7
-EPS: float = 1e-9
-DEBUG: bool = os.path.exists("debug.txt")
-
-# --- UTILITIES ---
-
-def benchmark(func) :
-    if not DEBUG: return func  # Disable on judge
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        wrapper.calls += 1
-        start = time.perf_counter()
-        res = func(*args, **kwargs)
-        end = time.perf_counter()
-        wrapper.duration += end - start
-        return res
-
-    wrapper.calls = 0
-    wrapper.duration = 0
-    return wrapper
-
-def trace(func):
-    if not DEBUG: return func
-    level = 0
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        nonlocal level
-        indent = "  | " * level
-        arg_str = ", ".join(map(repr, args))
-        print(f"{indent}+-- {func.__name__}({arg_str})", file=sys.stderr)
-        level += 1
-        res = func(*args, **kwargs)
-        level -= 1
-        print(f"{indent}+-- return {repr(res)}", file=sys.stderr)
-        return res
-    return wrapper
-
-    return wrapper
-
-def report(func,res=None):
-    if not DEBUG: return func  # Disable on judge
-    if func.calls:
-        print(f"Calls:  {func.calls}", file=sys.stderr)
-    if func.duration:
-        print(f"Time:  {func.duration:.6f}s", file=sys.stderr)
-    if res:
-        print(f"Memory: {sys.getsizeof(res) if res else 0} bytes (return val)", file=sys.stderr)
-
-def inspect(obj):
-    """Prints all non-private attributes of an object."""
-    attrs = {k: v for k, v in vars(obj).items() if not k.startswith("_")}
-    print(f"Object {type(obj).__name__}: {attrs}")
-
-# --- SOLVE ---
-
-@benchmark
-@cache
-@trace
-def fib(n,level=0):
-    if n < 2: return n
-    return fib(n-1) + fib(n-2)
+from typing import List, Optional, Dict, Set
 
 def solve():
     # Read single integer
@@ -101,11 +25,28 @@ def solve():
     # grid = [input().strip() for _ in range(R)]
 
     # Your logic here
-    return 0
-    
 
-def main() -> None:
-    flag: bool = False  # multiple test cases
+    n = int(input())
+    if n == 1:
+        print(1)
+    elif (n == 2) or (n == 3):
+        print("NO SOLUTION")
+    else:
+        res = ['' for _ in range(n)]
+        l = 0
+        r = n//2
+        for i in range(1,n+1):
+            if (i & 1) == 0:
+                res[l] = str(i)
+                l += 1
+            else:
+                res[r] = str(i)
+                r += 1
+        print(" ".join(res))
+
+
+def main():
+    flag = False  # multiple test cases
     if flag:
         t = int(input())
         for _ in range(t):
@@ -165,7 +106,6 @@ class IOWrapper(IOBase):
 
 
 sys.stdin, sys.stdout = IOWrapper(sys.stdin), IOWrapper(sys.stdout)
-if DEBUG: atexit.register(sys.stdout.flush)
 input = lambda: sys.stdin.readline().rstrip("\r\n")
 
 # endregion

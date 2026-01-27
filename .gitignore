@@ -17,6 +17,7 @@ src/
 extras
 input.txt
 output.txt
+debug.txt
 
 ### C ###
 # Prerequisites
