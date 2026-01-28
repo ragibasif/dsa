@@ -160,3 +160,54 @@ def fib(n):
 print(fib.cache_info()) # Returns a named tuple showing hits, misses, and size.
 fib.cache_clear() # Deletes all cached results and resets statistics.
 ```
+
+Converts an array to a singly-linked list.
+
+```py
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+    def __repr__(self) -> str:
+        return f"ListNode({self.val})"        
+
+def arr_to_sll(arr):
+    dummy = ListNode(0)
+    curr = dummy
+    for v in arr:
+        curr.next = ListNode(v)
+        curr = curr.next
+    return dummy.next
+```
+
+Debug printing for singly-linked list. Detects cycles.
+
+```py
+def dsll(head):
+    res = []
+    curr = head
+    seen = set()
+    bound = 25
+    
+    while curr:
+        node_id = id(curr)
+        if node_id in seen:
+            res.append(f"Cycle({curr.val})")
+            break
+        
+        seen.add(node_id)
+        res.append(str(curr.val))
+        curr = curr.next
+        
+        if len(res) >= bound:
+            res.append("...")
+            break
+    
+    if not curr and len(res) < bound + 1:
+        res.append("None")
+        
+    res = " -> ".join(res)
+    print(res)
+```
+

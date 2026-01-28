@@ -20,6 +20,7 @@ DEBUG: bool = os.path.exists("debug.txt")
 
 # --- UTILITIES ---
 
+
 def benchmark(func):
     if not DEBUG:
         return func
@@ -37,6 +38,7 @@ def benchmark(func):
     wrapper.duration = 0
     return wrapper
 
+
 def report(func, res=None):
     if not DEBUG:
         return func
@@ -45,7 +47,11 @@ def report(func, res=None):
     if func.duration:
         print(f"Time:  {func.duration:.6f}s", file=sys.stderr)
     if res:
-        print(f"Memory: {sys.getsizeof(res) if res else 0} bytes (return val)", file=sys.stderr)
+        print(
+            f"Memory: {sys.getsizeof(res) if res else 0} bytes (return val)",
+            file=sys.stderr,
+        )
+
 
 def trace(func):
     if not DEBUG:
@@ -63,8 +69,8 @@ def trace(func):
         level -= 1
         print(f"{indent}+-- return {repr(res)}", file=sys.stderr)
         return res
-    return wrapper
 
+    return wrapper
 
 
 def inspect(obj):
@@ -73,7 +79,52 @@ def inspect(obj):
     print(f"object {type(obj).__name__}: {attrs}")
 
 
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+    def __repr__(self) -> str:
+        return f"ListNode({self.val})"        
+
+def dsll(head):
+    res = []
+    curr = head
+    seen = set()
+    bound = 25
+    
+    while curr:
+        node_id = id(curr)
+        if node_id in seen:
+            res.append(f"Cycle({curr.val})")
+            break
+        
+        seen.add(node_id)
+        res.append(str(curr.val))
+        curr = curr.next
+        
+        if len(res) >= bound:
+            res.append("...")
+            break
+    
+    if not curr and len(res) < bound + 1:
+        res.append("None")
+        
+    res = " -> ".join(res)
+    print(res)
+
+def arr_to_sll(arr):
+    dummy = ListNode(0)
+    curr = dummy
+    for v in arr:
+        curr.next = ListNode(v)
+        curr = curr.next
+    return dummy.next
+
+
 # --- SOLVE ---
+
 
 def solve():
     """
@@ -90,8 +141,16 @@ def solve():
     R, C = map(int, input().split())
     grid = [input().strip() for _ in range(R)]
     """
+
+    head = arr_to_sll([423,423,23,5,25,3,2,6,26,24232,62266])
+    dsll(head)
+    curr = head.next.next.next
+    dummy = head
+    while dummy.next:
+        dummy = dummy.next
+    dummy.next = curr
     
-    pass
+    dsll(head)
 
 
 def main():
