@@ -70,3 +70,62 @@
 - Permutations: `itertools.permutations([1,2,3])`
 - Integer Square Root: `math.isqrt(n)` is faster than `int(n**0.5)`
 - Reverse a list: `list[::-1]`
+
+### Snippets
+
+Decorator to trace recursive functions
+
+```py
+from functools import wraps
+
+def trace(func):
+    if not DEBUG:
+        return func
+    level = 0
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        nonlocal level
+        indent = "  | " * level
+        arg_str = ", ".join(map(repr, args))
+        print(f"{indent}+-- {func.__name__}({arg_str})", file=sys.stderr)
+        level += 1
+        res = func(*args, **kwargs)
+        level -= 1
+        print(f"{indent}+-- return {repr(res)}", file=sys.stderr)
+        return res
+    return wrapper
+```
+
+Decorator for tracking call count and execution time
+
+```py
+import time
+
+def benchmark(func):
+    if not DEBUG:
+        return func
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        wrapper.calls += 1
+        start = time.perf_counter()
+        res = func(*args, **kwargs)
+        end = time.perf_counter()
+        wrapper.duration += end - start
+        return res
+
+    wrapper.calls = 0
+    wrapper.duration = 0
+    return wrapper
+
+def report(func, res=None):
+    if not DEBUG:
+        return func
+    if func.calls:
+        print(f"Calls:  {func.calls}", file=sys.stderr)
+    if func.duration:
+        print(f"Time:  {func.duration:.6f}s", file=sys.stderr)
+    if res:
+        print(f"Memory: {sys.getsizeof(res) if res else 0} bytes (return val)", file=sys.stderr)
+```
