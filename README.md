@@ -71,9 +71,16 @@
 - Integer Square Root: `math.isqrt(n)` is faster than `int(n**0.5)`
 - Reverse a list: `list[::-1]`
 
-### Snippets
+### Utilities
 
-Decorator to trace recursive functions
+Boolean to check if local environment.
+
+```py
+import os
+DEBUG: bool = os.path.exists("debug.txt")
+```
+
+Decorator to trace recursive functions.
 
 ```py
 from functools import wraps
@@ -97,9 +104,10 @@ def trace(func):
     return wrapper
 ```
 
-Decorator for tracking call count and execution time
+Decorator for tracking call count and execution time.
 
 ```py
+from functools import wraps
 import time
 
 def benchmark(func):
@@ -129,3 +137,12 @@ def report(func, res=None):
     if res:
         print(f"Memory: {sys.getsizeof(res) if res else 0} bytes (return val)", file=sys.stderr)
 ```
+
+Prints all non-private attributes of an object.
+
+```py
+def inspect(obj):
+    attrs = {k: v for k, v in vars(obj).items() if not k.startswith("_")}
+    print(f"object {type(obj).__name__}: {attrs}")
+```
+

@@ -68,9 +68,9 @@ def trace(func):
 
 
 def inspect(obj):
-    """Prints all non-private attributes of an object."""
+    """prints all non-private attributes of an object."""
     attrs = {k: v for k, v in vars(obj).items() if not k.startswith("_")}
-    print(f"Object {type(obj).__name__}: {attrs}")
+    print(f"object {type(obj).__name__}: {attrs}")
 
 
 # --- SOLVE ---
@@ -91,7 +91,6 @@ def solve():
     grid = [input().strip() for _ in range(R)]
     """
     
-    inspect(int)
     pass
 
 
