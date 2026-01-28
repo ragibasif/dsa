@@ -12,7 +12,6 @@ import heapq
 import itertools
 from functools import cache, wraps
 
-
 # --- CONSTANTS ---
 
 MOD: int = 10**9 + 7
@@ -20,7 +19,6 @@ EPS: float = 1e-9
 DEBUG: bool = os.path.exists("debug.txt")
 
 # --- UTILITIES ---
-
 
 def benchmark(func):
     if not DEBUG:
@@ -56,9 +54,6 @@ def trace(func):
         level -= 1
         print(f"{indent}+-- return {repr(res)}", file=sys.stderr)
         return res
-
-    return wrapper
-
     return wrapper
 
 
@@ -70,19 +65,13 @@ def report(func, res=None):
     if func.duration:
         print(f"Time:  {func.duration:.6f}s", file=sys.stderr)
     if res:
-        print(
-            f"Memory: {sys.getsizeof(res) if res else 0} bytes (return val)",
-            file=sys.stderr,
-        )
+        print(f"Memory: {sys.getsizeof(res) if res else 0} bytes (return val)", file=sys.stderr)
 
 
 def inspect(obj):
     """Prints all non-private attributes of an object."""
     attrs = {k: v for k, v in vars(obj).items() if not k.startswith("_")}
     print(f"Object {type(obj).__name__}: {attrs}")
-
-
-# --- SOLVE ---
 
 
 @benchmark
@@ -93,27 +82,187 @@ def fib(n, level=0):
         return n
     return fib(n - 1) + fib(n - 2)
 
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+    def __str__(self) -> str:
+        res = []
+        curr = self
+        seen = set()
+        bound = 25
+        
+        while curr:
+            node_id = id(curr)
+            if node_id in seen:
+                res.append(f"Cycle({curr.val})")
+                break
+            
+            seen.add(node_id)
+            res.append(str(curr.val))
+            curr = curr.next
+            
+            if len(res) >= bound:
+                res.append("...")
+                break
+        
+        if not curr and len(res) < bound + 1:
+            res.append("None")
+            
+        return " -> ".join(res)
+
+    def __repr__(self) -> str:
+        return f"ListNode({self.val})"        
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+    def __str__(self) -> str:
+        lines = []
+
+        def build_tree_string(node, prefix="", is_left=True, is_root=True):
+            if node is None:
+                label = "(L)" if is_left else "(R)"
+                # Using \-- for bottom (left) and /-- for top (right)
+                connector = "\\-- " if is_left else "/-- "
+                lines.append(f"{prefix}{connector}{label} [N]")
+                return
+            
+            if node.right or node.left:
+                build_tree_string(
+                    node.right, 
+                    prefix + ("|       " if is_left and not is_root else "        "), 
+                    False, 
+                    False
+                )
+            
+            if is_root:
+                connector = "ROOT--- "
+            else:
+                label = "(L)" if is_left else "(R)"
+                connector = "\\-- " if is_left else "/-- "
+                connector += label + " "
+            
+            lines.append(f"{prefix}{connector}{node.val}")
+            
+            if node.left or node.right:
+                build_tree_string(
+                    node.left, 
+                    prefix + ("        " if is_left or is_root else "|       "), 
+                    True, 
+                    False
+                )
+
+        build_tree_string(self)
+        return "\n" + "\n".join(lines) + "\n"
+
+    def build(vals):
+        if not vals: return None
+        it = iter(vals)
+        root = TreeNode(next(it))
+        q = deque([root])
+        while q:
+            node = q.popleft()
+            try:
+                val = next(it)
+                if val is not None:
+                    node.left = TreeNode(val)
+                    q.append(node.left)
+                val = next(it)
+                if val is not None:
+                    node.right = TreeNode(val)
+                    q.append(node.right)
+            except StopIteration:
+                break
+        return root
+
+class TrieNode:
+    def __init__(self, char=""):
+        self.char = char
+        self.children = {}  # Map of char -> TrieNode
+        self.is_end = False
+
+    def __str__(self) -> str:
+        lines = []
+
+        def build_trie_string(node, prefix="", is_last=True):
+            # Mark the node if it's the end of a word
+            marker = "*" if node.is_end else ""
+            display_char = node.char if node.char else "ROOT"
+            
+            # Draw the current node
+            connector = "\\-- " if is_last else "|-- "
+            lines.append(f"{prefix}{connector}{display_char}{marker}")
+
+            # Prepare prefix for children
+            new_prefix = prefix + ("    " if is_last else "|   ")
+            
+            # Sort children to keep output deterministic
+            child_chars = sorted(node.children.keys())
+            for i, char in enumerate(child_chars):
+                is_last_child = (i == len(child_chars) - 1)
+                build_trie_string(node.children[char], new_prefix, is_last_child)
+
+        build_trie_string(self)
+        return "\n".join(lines)
+
+    def insert(root, word):
+        curr = root
+        for char in word:
+            if char not in curr.children:
+                curr.children[char] = TrieNode(char)
+            curr = curr.children[char]
+        curr.is_end = True 
+
+
+# --- SOLVE ---
 
 @benchmark
 @cache
 @trace
 def solve():
-    # Read single integer
-    # n = int(input())
+    """
+    Read single integer:
+    n = int(input())
 
-    # Read multiple integers
-    # n, m = map(int, input().split())
+    Read multiple integers:
+    n, m = map(int, input().split())
 
-    # Read an array/list of integers
-    # arr = list(map(int, input().split()))
+    Read an array/list of integers:
+    arr = list(map(int, input().split()))
 
-    # Grid traversal
-    # R, C = map(int, input().split())
-    # grid = [input().strip() for _ in range(R)]
+    Grid traversal:
+    R, C = map(int, input().split())
+    grid = [input().strip() for _ in range(R)]
+    """
 
-    # Your logic here
+# 1. Normal List: 1 -> 2 -> 3
+    head = ListNode(1, ListNode(2, ListNode(3)))
+    print("Normal", head)
 
-    pass
+# 2. Cyclic List: 1 -> 2 -> 3 -> (back to 2)
+    node1 = ListNode(1)
+    node2 = ListNode(2)
+    node3 = ListNode(3)
+    node1.next = node2
+    node2.next = node3
+    node3.next = node2 # Creating the cycle
+
+    print("Cyclic",node1)
+
+    root = TreeNode(10)
+    root.right = TreeNode(20, left=TreeNode(15))
+    print(root)
+
+    print(TreeNode.build([1, 2, 3, None, 4]))
+    root = TrieNode()
+    for w in ["cat", "cap", "can", "dog"]:
+        TrieNode.insert(root, w)
+    print(root)
 
 
 def main():
