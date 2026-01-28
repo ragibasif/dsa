@@ -146,3 +146,17 @@ def inspect(obj):
     print(f"object {type(obj).__name__}: {attrs}")
 ```
 
+Handle memoization with Python's built-in `@cache` decorator. It has no `maxsize` and will grow for as long as the program runs.
+
+```py
+from functools import cache
+
+@cache
+def fib(n):
+    if n < 2:
+        return n
+    return fib(n - 1) + fib(n - 2)
+
+print(fib.cache_info()) # Returns a named tuple showing hits, misses, and size.
+fib.cache_clear() # Deletes all cached results and resets statistics.
+```
