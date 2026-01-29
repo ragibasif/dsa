@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import signal
 import atexit
 import os
 import sys
@@ -20,6 +21,7 @@ EPS: float = 1e-9
 # --- UTILITIES ---
 
 DEBUG: bool = os.path.exists("debug.txt")
+
 
 def benchmark(func):
     if not DEBUG:
@@ -52,6 +54,7 @@ def report(func, res=None):
             file=sys.stderr,
         )
 
+
 def trace(func):
     if not DEBUG:
         return func
@@ -79,6 +82,7 @@ def inspect(obj):
 
 # --- SOLVE ---
 
+
 def solve():
     """
     Read single integer:
@@ -95,15 +99,26 @@ def solve():
     grid = [input().strip() for _ in range(R)]
     """
     pass
-    
+
+
 def main():
     flag: bool = False  # multiple test cases
+
+    def handler(signum, frame):
+        raise Exception("TLE: Test took too long!")
+
+    signal.signal(signal.SIGALRM, handler)
+
     if flag:
         t = int(input())
         for _ in range(t):
+            signal.alarm(2)  # Limit each test to 2 seconds
             solve()
+            signal.alarm(0)  # Reset
     else:
+        signal.alarm(2)  # Limit each test to 2 seconds
         solve()
+        signal.alarm(0)  # Reset
 
 
 # region fastio

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-import os
 import sys
 import time
 from functools import wraps
+
 
 def benchmark(func):
     @wraps(func)
@@ -62,9 +62,11 @@ def fib(n):
         return n
     return fib(n - 1) + fib(n - 2)
 
+
 def main():
     print(fib(6))
     report(fib)
+
 
 if __name__ == "__main__":
     sys.setrecursionlimit(200000)

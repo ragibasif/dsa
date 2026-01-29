@@ -192,7 +192,7 @@ table = [[(i + 1) * (j + 1) for j in range(COLS)] for i in range(ROWS)]
 Visualizes a 2D grid with row/column indices and fixed-width alignment. The width is the number of characters per cell.
 
 ```py
-def dmatrix(matrix,width=5):
+def debug_matrix(matrix,width=5):
     if not matrix or not matrix[0]:
         print(f"Empty", file=sys.stderr)
         return
@@ -251,3 +251,72 @@ def debug_sll(head):
     res = " -> ".join(res)
     print(res)
 ```
+
+### Trees
+
+Print tree structure for debugging.
+
+```py
+def debug_tree(root):
+        lines = []
+
+        def build_line(node, prefix="", is_left=True, is_root=True):
+            if node is None:
+                label = "(L)" if is_left else "(R)"
+                # Using \-- for bottom (left) and /-- for top (right)
+                connector = "\\-- " if is_left else "/-- "
+                lines.append(f"{prefix}{connector}{label} [N]")
+                return
+            
+            if node.right or node.left:
+                build_line(
+                    node.right, 
+                    prefix + ("|       " if is_left and not is_root else "        "), 
+                    False, 
+                    False
+                )
+            
+            if is_root:
+                connector = "ROOT--- "
+            else:
+                label = "(L)" if is_left else "(R)"
+                connector = "\\-- " if is_left else "/-- "
+                connector += label + " "
+            
+            lines.append(f"{prefix}{connector}{node.val}")
+            
+            if node.left or node.right:
+                build_line(
+                    node.left, 
+                    prefix + ("        " if is_left or is_root else "|       "), 
+                    True, 
+                    False
+                )
+
+        build_line(root)
+        print("\n" + "\n".join(lines) + "\n")
+
+```
+Build a tree in level order from an array.
+
+```py
+def build_tree(arr):
+        if not arr:
+            return None
+        root = TreeNode(arr[0])
+        queue = deque([root])
+        i = 1
+        while queue and i < len(arr):
+            node = queue.popleft()
+            if i < len(arr) and arr[i] is not None:
+                node.left = TreeNode(arr[i])
+                queue.append(node.left)
+            i += 1
+            if i < len(arr) and arr[i] is not None:
+                node.right = TreeNode(arr[i])
+                queue.append(node.right)
+            i += 1
+        return root
+```
+
+
