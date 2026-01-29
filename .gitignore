@@ -10,13 +10,11 @@
 *.log.*
 *.sig
 
-pkg/
-src/
-
 .DS_Store
 extras
 input.txt
 output.txt
+tests.txt
 debug.txt
 
 ### C ###
