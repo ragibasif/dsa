@@ -38,6 +38,17 @@
 - Even number (`n = 2k`)
 - Odd number (`n = 2k + 1`)
 
+### NP-Complete
+
+- NP-Complete Problems:
+    - Traveling Salesperson Problem (TSP)
+    - Longest Path Problem
+    - Hamiltonian Path Problem
+    - Graph Coloring Problem
+    - The Knapsack Problem
+    - Subset Sum Problem
+
+
 ### Python
 
 - Strings are immutable and that's why they can be used as keys to dictionaries
