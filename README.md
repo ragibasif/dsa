@@ -80,7 +80,7 @@ import os
 DEBUG: bool = os.path.exists("debug.txt")
 ```
 
-Decorator to trace recursive functions.
+Decorator to trace functions. Useful for recursive functions.
 
 ```py
 from functools import wraps
@@ -161,7 +161,146 @@ print(fib.cache_info()) # Returns a named tuple showing hits, misses, and size.
 fib.cache_clear() # Deletes all cached results and resets statistics.
 ```
 
-Converts an array to a singly-linked list.
+Create random test cases with the `random` module.
+
+```py
+from random import *
+
+#List of N random integers from interval [a,b]:
+
+print( [ randint(a, b) for i in range(N) ] ) 
+
+#List of N random real numbers from interval [a,b]:
+
+print( [ uniform(a, b) for i in range(N) ] ) 
+
+#Random permutation of numbers 1 to N:
+
+seq = list(range(1, N+1)) 
+shuffle(seq) 
+print(seq) 
+
+#Matrix of size NxN with random integers from interval [a,b]:
+
+for r in range(N): 
+    print( [ randint(a, b) for c in range(N) ] ) 
+
+
+#With zeros on diagonal:
+
+for r in range(N): 
+    print( [ randint(a, b) if r != c else 0 for c in range(N) ] ) 
+
+
+#Symmetric matrix:
+
+matrix = [ [0] * N for r in range(N) ] 
+for r in range(N): 
+    for c in range(r+1): 
+        matrix[r][c] = matrix[c][r] = randint(a, b) 
+print(matrix) 
+
+
+#If you want to output matrix with spaces between the numbers:
+
+for row in matrix: 
+    print( ' '.join( map(str, row) ) ) 
+
+#Random tree on N vertices:
+#Output is the list of edges. Vertices are numbered from 0 - (N-1).
+
+print( [ (randint(0, i), i+1) for i in range(N-1) ] ) 
+
+#The above code will generate rather shallow trees, with expected depth only O(log(N)). To generate the deep trees use:
+
+alpha = 3  # affects the depth of the tree. Smaller value generates deeper trees. 
+print( [ (randint(max(0, i-alpha), i), i+1) for i in range(N-1) ] ) 
+
+#If alpha == 0, then the code will generate a path, i.e. the deepest possible tree.
+
+#Random graph on N vertices (may be unconnected):
+#Output is the list of edges. Vertices are numbered from 0 - (N-1).
+
+print( [ (i,j) for i in range(N) for j in range(i) if randint(0,1) ] ) 
+
+#Random connected graph on N vertices:
+
+#Simply union the edges of random tree and random graph:
+
+print(set((randint(0, i), i+1) for i in range(N-1)) | set((i,j) for i in range(N) for j in range(i) if randint(0,1))) 
+
+#Note: graphs are NOT generated with uniform probability.
+
+#Random string of length N:
+
+#Letters of your choice:
+
+print( ''.join( choice('ABCabc123') for i in range(N) ) ) 
+
+#Upper-case / lower-case letters:
+
+from string import * 
+print( ''.join( choice(ascii_uppercase) for i in range(N) ) )  # upper-case 
+print( ''.join( choice(ascii_lowercase) for i in range(N) ) )  # lower-case 
+
+#Here is a cool trick to generate all the letters that satisfy some regular expression:
+
+import re 
+letters_re = re.compile(r'[A-Za-z0-9]')  # regex of letters we are interested in 
+print( ''.join(chr(c) for c in range(256) if letters_re.match(chr(c))) ) 
+```
+### 2D Arrays
+
+Nested list comprehensions can be used to create a matrix with `R` rows and `C` columns.
+
+```py
+rows, cols = 3, 4
+val = 0
+
+matrix = [[val for _ in range(cols)] for _ in range(rows)]
+
+visited = [[False for _ in range(cols)] for _ in range(rows)]
+
+dist = [[float('inf') for _ in range(cols)] for _ in range(rows)]
+
+grid = [[(r * cols + c) for c in range(cols)] for r in range(rows)]
+
+R, C = 5, 5
+# Create a multiplication table matrix
+table = [[(i + 1) * (j + 1) for j in range(C)] for i in range(R)]
+```
+
+Visualizes a 2D grid with row/column indices and fixed-width alignment. The width is the number of characters per cell.
+
+```py
+def dmatrix(matrix,width=5):
+    if not matrix or not matrix[0]:
+        print(f"Empty", file=sys.stderr)
+        return
+
+    R = len(matrix)
+    C = len(matrix[0])
+    
+    print(f"\n({R}x{C})", file=sys.stderr)
+    
+    # Create Column Header (0, 1, 2...)
+    col_header = " " * 4 + "".join(f"{c:>{width}}" for c in range(C))
+    print(col_header, file=sys.stderr)
+    print(" " * 3 + "+" + "-" * (C * width), file=sys.stderr)
+
+    for r in range(R):
+        row_str = f"{r:2d} |"
+        for c in range(C):
+            val = matrix[r][c]
+            char = "." if val is None else str(val)
+            if len(char) > width - 1:
+                char = char[:width-2] + "+"
+            row_str += f"{char:>{width}}"
+        print(row_str, file=sys.stderr)
+    print(" " * 3 + "+" + "-" * (C * width) + "\n", file=sys.stderr)
+```
+
+### Singly-Linked Lists
 
 ```py
 class ListNode:
@@ -171,7 +310,11 @@ class ListNode:
 
     def __repr__(self) -> str:
         return f"ListNode({self.val})"        
+```
 
+Converts an array to a singly-linked list.
+
+```py
 def arr_to_sll(arr):
     dummy = ListNode(0)
     curr = dummy
@@ -210,4 +353,3 @@ def dsll(head):
     res = " -> ".join(res)
     print(res)
 ```
-

@@ -12,6 +12,10 @@ import heapq
 import itertools
 from functools import cache, wraps
 
+import re 
+from string import * 
+from random import *
+
 # --- CONSTANTS ---
 
 MOD: int = 10**9 + 7
@@ -79,50 +83,6 @@ def inspect(obj):
     print(f"object {type(obj).__name__}: {attrs}")
 
 
-
-class ListNode:
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
-
-    def __repr__(self) -> str:
-        return f"ListNode({self.val})"        
-
-def dsll(head):
-    res = []
-    curr = head
-    seen = set()
-    bound = 25
-    
-    while curr:
-        node_id = id(curr)
-        if node_id in seen:
-            res.append(f"Cycle({curr.val})")
-            break
-        
-        seen.add(node_id)
-        res.append(str(curr.val))
-        curr = curr.next
-        
-        if len(res) >= bound:
-            res.append("...")
-            break
-    
-    if not curr and len(res) < bound + 1:
-        res.append("None")
-        
-    res = " -> ".join(res)
-    print(res)
-
-def arr_to_sll(arr):
-    dummy = ListNode(0)
-    curr = dummy
-    for v in arr:
-        curr.next = ListNode(v)
-        curr = curr.next
-    return dummy.next
-
-
 # --- SOLVE ---
 
 
@@ -141,18 +101,8 @@ def solve():
     R, C = map(int, input().split())
     grid = [input().strip() for _ in range(R)]
     """
-
-    head = arr_to_sll([423,423,23,5,25,3,2,6,26,24232,62266])
-    dsll(head)
-    curr = head.next.next.next
-    dummy = head
-    while dummy.next:
-        dummy = dummy.next
-    dummy.next = curr
+    pass
     
-    dsll(head)
-
-
 def main():
     flag: bool = False  # multiple test cases
     if flag:
