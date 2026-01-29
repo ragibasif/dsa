@@ -52,7 +52,6 @@ def report(func, res=None):
             file=sys.stderr,
         )
 
-
 def trace(func):
     if not DEBUG:
         return func
@@ -74,7 +73,6 @@ def trace(func):
 
 
 def inspect(obj):
-    """prints all non-private attributes of an object."""
     attrs = {k: v for k, v in vars(obj).items() if not k.startswith("_")}
     print(f"object {type(obj).__name__}: {attrs}")
 

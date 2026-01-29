@@ -227,32 +227,10 @@ def dmatrix(matrix,width=5):
 
 ### Singly-Linked Lists
 
-```py
-class ListNode:
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
-
-    def __repr__(self) -> str:
-        return f"ListNode({self.val})"        
-```
-
-Converts an array to a singly-linked list.
-
-```py
-def arr_to_sll(arr):
-    dummy = ListNode(0)
-    curr = dummy
-    for v in arr:
-        curr.next = ListNode(v)
-        curr = curr.next
-    return dummy.next
-```
-
 Debug printing for singly-linked list. Detects cycles.
 
 ```py
-def dsll(head):
+def debug_sll(head):
     res = []
     curr = head
     seen = set()
