@@ -66,6 +66,8 @@
 - LCM: `math.lcm(a,b)`
 - Fast Power/Mod: `pow(base, exp, mod)` is faster than `(base**exp) % mod`
 - Fast Grid Initialization: `grid = [[0 for _ in range(COLUMNS)] for _ in range(ROWS)]`
+- nCr: `math.comb(n,r)`
+- nPr: `math.perm(n,r)`
 - Combinations: `itertools.combinations([1,2,3], 2)` → (1,2), (1,3), (2,3)
 - Permutations: `itertools.permutations([1,2,3])`
 - Integer Square Root: `math.isqrt(n)` is faster than `int(n**0.5)`
@@ -299,6 +301,7 @@ def dmatrix(matrix,width=5):
         print(row_str, file=sys.stderr)
     print(" " * 3 + "+" + "-" * (C * width) + "\n", file=sys.stderr)
 ```
+
 
 ### Singly-Linked Lists
 

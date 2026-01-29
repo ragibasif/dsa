@@ -12,18 +12,14 @@ import heapq
 import itertools
 from functools import cache, wraps
 
-import re 
-from string import * 
-from random import *
-
 # --- CONSTANTS ---
 
 MOD: int = 10**9 + 7
 EPS: float = 1e-9
-DEBUG: bool = os.path.exists("debug.txt")
 
 # --- UTILITIES ---
 
+DEBUG: bool = os.path.exists("debug.txt")
 
 def benchmark(func):
     if not DEBUG:
@@ -84,7 +80,6 @@ def inspect(obj):
 
 
 # --- SOLVE ---
-
 
 def solve():
     """
