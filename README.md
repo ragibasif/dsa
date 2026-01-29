@@ -169,29 +169,24 @@ def fib(n):
         return n
     return fib(n - 1) + fib(n - 2)
 
-print(fib.cache_info()) # Returns a named tuple showing hits, misses, and size.
-fib.cache_clear() # Deletes all cached results and resets statistics.
+# Returns a named tuple showing hits, misses, and size.
+info = fib.cache_info()
+print(info) 
+
+# Deletes all cached results and resets statistics.
+fib.cache_clear() 
 ```
 
 ### 2D Arrays
 
-Nested list comprehensions can be used to create a matrix with `R` rows and `C` columns.
+Nested list comprehensions can be used to create a matrix with `ROWS` rows and `COLS` columns.
 
 ```py
-rows, cols = 3, 4
-val = 0
-
-matrix = [[val for _ in range(cols)] for _ in range(rows)]
-
-visited = [[False for _ in range(cols)] for _ in range(rows)]
-
-dist = [[float('inf') for _ in range(cols)] for _ in range(rows)]
-
-grid = [[(r * cols + c) for c in range(cols)] for r in range(rows)]
-
-R, C = 5, 5
-# Create a multiplication table matrix
-table = [[(i + 1) * (j + 1) for j in range(C)] for i in range(R)]
+matrix = [[0 for _ in range(COLS)] for _ in range(ROWS)]
+visited = [[False for _ in range(COLS)] for _ in range(ROWS)]
+dist = [[float('inf') for _ in range(COLS)] for _ in range(ROWS)]
+grid = [[(r * COLS + c) for c in range(COLS)] for r in range(ROWS)]
+table = [[(i + 1) * (j + 1) for j in range(COLS)] for i in range(ROWS)]
 ```
 
 Visualizes a 2D grid with row/column indices and fixed-width alignment. The width is the number of characters per cell.
