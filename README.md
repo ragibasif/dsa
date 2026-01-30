@@ -92,6 +92,57 @@ import os
 DEBUG: bool = os.path.exists("debug.txt")
 ```
 
+This decorator enables infinite recursion. To use it on a recursive function:
+    - change all `return` to `yield`
+    - add `yield` before recursive function calls
+
+```py
+from types import GeneratorType
+def bootstrap(func, stack=[]):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if stack:
+            return func(*args, **kwargs)
+        to = func(*args, **kwargs)
+        while True:
+            if type(to) is GeneratorType:
+                stack.append(to)
+                to = next(to)
+            else:
+                stack.pop()
+                if not stack:
+                    break
+                to = stack[-1].send(to)
+        return to
+
+    return wrapper
+
+
+# change this:
+def factorial(n):
+    if n == 0:
+        return 1
+    return n * factorial(n - 1)
+
+print(factorial(10))   # prints 3628800
+print(factorial(1000)) # exceeds recursion limit
+
+
+# to this:
+
+@bootstrap
+def factorial(n):
+    if n == 0:
+        yield 1
+    else:
+        yield n * (yield factorial(n - 1))
+
+print(factorial(10))    # prints 3628800
+print(factorial(1000)   # prints 402387...000000
+print(factorial(10000)) # prints 284625...000000
+```
+
+
 Decorator to trace functions. Useful for recursive functions.
 
 ```py
