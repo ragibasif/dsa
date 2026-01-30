@@ -368,5 +368,3 @@ def build_tree(arr):
         i += 1
     return root
 ```
-
-
