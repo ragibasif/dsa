@@ -10,14 +10,6 @@
 
 ## Notes
 
-![Flowchart](docs/dsa_flowchart.png)
-
-### Asymptotic Complexity
-
-![Big O](docs/dsa_big_o.png)
-
-![Sorting Big O](docs/dsa_sorting_big_o.png)
-
 ### Bit Manipulation
 
 - Get i-th bit: `(x >> i) & 1`
