@@ -1,8 +1,8 @@
-# LeetCode
+# Cheat Sheet
 
 ## Code Templates
 
-### Two pointers: one input, opposite ends 
+### Two pointers: one input, opposite ends
 
 ```py
 def fn(arr):
@@ -15,7 +15,7 @@ def fn(arr):
             left += 1
         else:
             right -= 1
-    
+
     return ans
 ```
 
@@ -31,15 +31,15 @@ def fn(arr1, arr2):
             i += 1
         else:
             j += 1
-    
+
     while i < len(arr1):
         # do logic
         i += 1
-    
+
     while j < len(arr2):
         # do logic
         j += 1
-    
+
     return ans
 ```
 
@@ -57,7 +57,7 @@ def fn(arr):
             left += 1
 
         # update ans
-    
+
     return ans
 ```
 
@@ -68,7 +68,7 @@ def fn(arr):
     prefix = [arr[0]]
     for i in range(1, len(arr)):
         prefix.append(prefix[-1] + arr[i])
-    
+
     return prefix
 ```
 
@@ -80,7 +80,7 @@ def fn(arr):
     ans = []
     for c in arr:
         ans.append(c)
-    
+
     return "".join(ans)
 ```
 
@@ -96,7 +96,7 @@ def fn(head):
         # do logic
         slow = slow.next
         fast = fast.next.next
-    
+
     return ans
 ```
 
@@ -110,8 +110,8 @@ def fn(head):
         next_node = curr.next
         curr.next = prev
         prev = curr
-        curr = next_node 
-        
+        curr = next_node
+
     return prev
 ```
 
@@ -129,7 +129,7 @@ def fn(arr, k):
         # do logic to change curr
         ans += counts[curr - k]
         counts[curr] += 1
-    
+
     return ans
 ```
 
@@ -148,7 +148,7 @@ def fn(arr):
             # do logic
             stack.pop()
         stack.append(num)
-    
+
     return ans
 ```
 
@@ -158,7 +158,7 @@ def fn(arr):
 def dfs(root):
     if not root:
         return
-    
+
     ans = 0
 
     # do logic
@@ -185,7 +185,7 @@ def dfs(root):
     return ans
 ```
 
-### Binary tree: BFS 
+### Binary tree: BFS
 
 ```py
 from collections import deque
@@ -222,7 +222,7 @@ def fn(graph):
             if neighbor not in seen:
                 seen.add(neighbor)
                 ans += dfs(neighbor)
-        
+
         return ans
 
     seen = {START_NODE}
@@ -244,7 +244,7 @@ def fn(graph):
             if neighbor not in seen:
                 seen.add(neighbor)
                 stack.append(neighbor)
-    
+
     return ans
 ```
 
@@ -265,7 +265,7 @@ def fn(graph):
             if neighbor not in seen:
                 seen.add(neighbor)
                 queue.append(neighbor)
-    
+
     return ans
 ```
 
@@ -281,11 +281,11 @@ def fn(arr, k):
         heapq.heappush(heap, (CRITERIA, num))
         if len(heap) > k:
             heapq.heappop(heap)
-    
+
     return [num for num in heap]
 ```
 
-### Binary search 
+### Binary search
 
 ```py
 def fn(arr, target):
@@ -300,7 +300,7 @@ def fn(arr, target):
             right = mid - 1
         else:
             left = mid + 1
-    
+
     # left is the insertion point
     return left
 ```
@@ -355,7 +355,7 @@ def fn(arr):
             right = mid - 1
         else:
             left = mid + 1
-    
+
     return left
 ```
 
@@ -375,7 +375,7 @@ def fn(arr):
             left = mid + 1
         else:
             right = mid - 1
-    
+
     return right
 ```
 
@@ -386,13 +386,13 @@ def backtrack(curr, OTHER_ARGUMENTS...):
     if (BASE_CASE):
         # modify the answer
         return
-    
+
     ans = 0
     for (ITERATE_OVER_INPUT):
         # modify the current state
         ans += backtrack(curr, OTHER_ARGUMENTS...)
         # undo the modification of the current state
-    
+
     return ans
 ```
 
@@ -403,10 +403,10 @@ def fn(arr):
     def dp(STATE):
         if BASE_CASE:
             return 0
-        
+
         if STATE in memo:
             return memo[STATE]
-        
+
         ans = RECURRENCE_RELATION(STATE)
         memo[STATE] = ans
         return ans
@@ -438,17 +438,17 @@ def fn(arr, k):
     dp = [[0] * (k + 1) for _ in range(n + 1)]
 
     # 2. Set base cases (if not already handled by initialization)
-    # Example: dp[0][j] = some_value 
+    # Example: dp[0][j] = some_value
 
     # 3. Iterate over state variables
     # Start from base cases and move toward the target state
     for i in range(1, n + 1):
         for j in range(1, k + 1):
-            
+
             # 4. Copy-paste recurrence logic
             # Change dp(state) function calls to dp[state] lookups
             dp[i][j] = RECURRENCE_RELATION_LOGIC
-            
+
     # 5. Return the final state
     return dp[n][k]
 ```
@@ -480,7 +480,7 @@ def fn(words):
             curr = curr.children[c]
         # at this point, you have a full word at curr
         # you can perform more logic here to give curr an attribute if you want
-    
+
     return root
 ```
 
@@ -498,7 +498,7 @@ while heap:
     curr_dist, node = heappop(heap)
     if curr_dist > distances[node]:
         continue
-    
+
     for nei, weight in graph[node]:
         dist = curr_dist + weight
         if dist < distances[nei]:

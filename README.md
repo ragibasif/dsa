@@ -214,10 +214,10 @@ def fib(n):
 
 # Returns a named tuple showing hits, misses, and size.
 info = fib.cache_info()
-print(info) 
+print(info)
 
 # Deletes all cached results and resets statistics.
-fib.cache_clear() 
+fib.cache_clear()
 ```
 
 ### 2D Arrays
@@ -242,9 +242,9 @@ def debug_matrix(matrix,width=5):
 
     R = len(matrix)
     C = len(matrix[0])
-    
+
     print(f"\n({R}x{C})", file=sys.stderr)
-    
+
     # Create Column Header (0, 1, 2...)
     col_header = " " * 4 + "".join(f"{c:>{width}}" for c in range(C))
     print(col_header, file=sys.stderr)
@@ -273,24 +273,24 @@ def debug_sll(head):
     curr = head
     seen = set()
     bound = 25
-    
+
     while curr:
         node_id = id(curr)
         if node_id in seen:
             res.append(f"Cycle({curr.val})")
             break
-        
+
         seen.add(node_id)
         res.append(str(curr.val))
         curr = curr.next
-        
+
         if len(res) >= bound:
             res.append("...")
             break
-    
+
     if not curr and len(res) < bound + 1:
         res.append("None")
-        
+
     res = " -> ".join(res)
     print(res)
 ```
@@ -310,29 +310,29 @@ def debug_tree(root):
             connector = "\\-- " if is_left else "/-- "
             lines.append(f"{prefix}{connector}{label} [N]")
             return
-        
+
         if node.right or node.left:
             build_line(
-                node.right, 
-                prefix + ("|       " if is_left and not is_root else "        "), 
-                False, 
+                node.right,
+                prefix + ("|       " if is_left and not is_root else "        "),
+                False,
                 False
             )
-        
+
         if is_root:
             connector = "ROOT--- "
         else:
             label = "(L)" if is_left else "(R)"
             connector = "\\-- " if is_left else "/-- "
             connector += label + " "
-        
+
         lines.append(f"{prefix}{connector}{node.val}")
-        
+
         if node.left or node.right:
             build_line(
-                node.left, 
-                prefix + ("        " if is_left or is_root else "|       "), 
-                True, 
+                node.left,
+                prefix + ("        " if is_left or is_root else "|       "),
+                True,
                 False
             )
 
