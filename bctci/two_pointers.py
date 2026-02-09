@@ -147,13 +147,40 @@ def valley(arr):
         return arr
     l = 0
     r = len(arr) - 1
-    while l < r:
-        if arr[l] > arr[r]:
+    res = [0] * len(arr)
+    p = len(arr) - 1
+    while l <= r:
+        if arr[l] >= arr[r]:
+            res[p] = arr[l]
             l+=1
-            r-=1
         else:
-            break
-    print(arr,arr[l:],arr[:r+1])
-print(valley([8,4,2,6]))
-print(valley([1,2]))
-print(valley([2,2,1,1]))
+            res[p] = arr[r]
+            r-=1
+        p-=1
+    return res
+
+def missing(arr,low,high):
+    res = []
+    lp = 0
+    hp = len(arr)-1
+    while lp < len(arr) and arr[lp] < low:
+        lp+=1
+    while hp >= 0 and arr[hp] > high:
+        hp-=1
+    while lp <= hp and low <=high:
+        if arr[lp] == low:
+            lp+=1
+        else:
+            res.append(low)
+        low+=1
+    while low<=high:
+        res.append(low)
+        low+=1
+
+    return res
+
+
+print(missing([6,9,12,15,18],9,13))
+print(missing([],9,9))
+print(missing([6,7,8,9],7,8))
+

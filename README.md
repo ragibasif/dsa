@@ -4,8 +4,8 @@
 
 ## Profiles
 
-- [CSES](https://cses.fi/user/397111)
 - [LeetCode](https://leetcode.com/u/10kgrind/)
+- [CSES](https://cses.fi/user/397111)
 - [Codeforces](https://codeforces.com/profile/10kgrind)
 
 ## Notes
@@ -33,12 +33,12 @@
 ### NP-Complete
 
 - NP-Complete Problems:
-    - Traveling Salesperson Problem (TSP)
-    - Longest Path Problem
-    - Hamiltonian Path Problem
-    - Graph Coloring Problem
-    - The Knapsack Problem
-    - Subset Sum Problem
+  - Traveling Salesperson Problem (TSP)
+  - Longest Path Problem
+  - Hamiltonian Path Problem
+  - Graph Coloring Problem
+  - The Knapsack Problem
+  - Subset Sum Problem
 
 ### Python
 
@@ -84,65 +84,13 @@ import os
 DEBUG: bool = os.path.exists("debug.txt")
 ```
 
-This decorator enables infinite recursion. To use it on a recursive function:
-    - change all `return` to `yield`
-    - add `yield` before recursive function calls
-
-```py
-from types import GeneratorType
-def bootstrap(func, stack=[]):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        if stack:
-            return func(*args, **kwargs)
-        to = func(*args, **kwargs)
-        while True:
-            if type(to) is GeneratorType:
-                stack.append(to)
-                to = next(to)
-            else:
-                stack.pop()
-                if not stack:
-                    break
-                to = stack[-1].send(to)
-        return to
-
-    return wrapper
-
-
-# change this:
-def factorial(n):
-    if n == 0:
-        return 1
-    return n * factorial(n - 1)
-
-print(factorial(10))   # prints 3628800
-print(factorial(1000)) # exceeds recursion limit
-
-
-# to this:
-
-@bootstrap
-def factorial(n):
-    if n == 0:
-        yield 1
-    else:
-        yield n * (yield factorial(n - 1))
-
-print(factorial(10))    # prints 3628800
-print(factorial(1000)   # prints 402387...000000
-print(factorial(10000)) # prints 284625...000000
-```
-
-
 Decorator to trace functions. Useful for recursive functions.
 
 ```py
 from functools import wraps
 
 def trace(func):
-    if not DEBUG:
-        return func
+    """Decorator to trace recursive functions."""
     level = 0
 
     @wraps(func)
@@ -157,48 +105,6 @@ def trace(func):
         print(f"{indent}+-- return {repr(res)}", file=sys.stderr)
         return res
     return wrapper
-```
-
-Decorator for tracking call count and execution time.
-
-```py
-from functools import wraps
-import time
-
-def benchmark(func):
-    if not DEBUG:
-        return func
-
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        wrapper.calls += 1
-        start = time.perf_counter()
-        res = func(*args, **kwargs)
-        end = time.perf_counter()
-        wrapper.duration += end - start
-        return res
-
-    wrapper.calls = 0
-    wrapper.duration = 0
-    return wrapper
-
-def report(func, res=None):
-    if not DEBUG:
-        return func
-    if func.calls:
-        print(f"Calls:  {func.calls}", file=sys.stderr)
-    if func.duration:
-        print(f"Time:  {func.duration:.6f}s", file=sys.stderr)
-    if res:
-        print(f"Memory: {sys.getsizeof(res) if res else 0} bytes (return val)", file=sys.stderr)
-```
-
-Prints all non-private attributes of an object.
-
-```py
-def inspect(obj):
-    attrs = {k: v for k, v in vars(obj).items() if not k.startswith("_")}
-    print(f"object {type(obj).__name__}: {attrs}")
 ```
 
 Handle memoization with Python's built-in `@cache` decorator. It has no `maxsize` and will grow for as long as the program runs.
@@ -261,7 +167,6 @@ def debug_matrix(matrix,width=5):
         print(row_str, file=sys.stderr)
     print(" " * 3 + "+" + "-" * (C * width) + "\n", file=sys.stderr)
 ```
-
 
 ### Singly-Linked Lists
 
@@ -339,6 +244,7 @@ def debug_tree(root):
     build_line(root)
     print("\n" + "\n".join(lines) + "\n")
 ```
+
 Build a tree in level order from an array.
 
 ```py

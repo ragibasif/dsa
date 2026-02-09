@@ -1,12 +1,14 @@
 # Cheat Sheet
 
+## Python
+
 ## Code Templates
 
 ### Two pointers: one input, opposite ends
 
 ```py
 def fn(arr):
-    left = ans = 0
+    left = and = 0
     right = len(arr) - 1
 
     while left < right:
@@ -16,14 +18,14 @@ def fn(arr):
         else:
             right -= 1
 
-    return ans
+    return and
 ```
 
 ### Two pointers: two inputs, exhaust both
 
 ```py
 def fn(arr1, arr2):
-    i = j = ans = 0
+    i = j = and = 0
 
     while i < len(arr1) and j < len(arr2):
         # do some logic here
@@ -40,14 +42,14 @@ def fn(arr1, arr2):
         # do logic
         j += 1
 
-    return ans
+    return and
 ```
 
 ### Sliding window
 
 ```py
 def fn(arr):
-    left = ans = curr = 0
+    left = and = curr = 0
 
     for right in range(len(arr)):
         # do logic here to add arr[right] to curr
@@ -56,9 +58,9 @@ def fn(arr):
             # remove arr[left] from curr
             left += 1
 
-        # update ans
+        # update and
 
-    return ans
+    return and
 ```
 
 ### Build a prefix sum
@@ -77,11 +79,11 @@ def fn(arr):
 ```py
 # arr is a list of characters
 def fn(arr):
-    ans = []
+    and = []
     for c in arr:
-        ans.append(c)
+        and.append(c)
 
-    return "".join(ans)
+    return "".join(and)
 ```
 
 ### Linked list: fast and slow pointer
@@ -90,14 +92,14 @@ def fn(arr):
 def fn(head):
     slow = head
     fast = head
-    ans = 0
+    and = 0
 
     while fast and fast.next:
         # do logic
         slow = slow.next
         fast = fast.next.next
 
-    return ans
+    return and
 ```
 
 ### Reversing a linked list
@@ -123,14 +125,14 @@ from collections import defaultdict
 def fn(arr, k):
     counts = defaultdict(int)
     counts[0] = 1
-    ans = curr = 0
+    and = curr = 0
 
     for num in arr:
         # do logic to change curr
-        ans += counts[curr - k]
+        and += counts[curr - k]
         counts[curr] += 1
 
-    return ans
+    return and
 ```
 
 ### Monotonic increasing stack
@@ -140,7 +142,7 @@ The same logic can be applied to maintain a monotonic queue.
 ```py
 def fn(arr):
     stack = []
-    ans = 0
+    and = 0
 
     for num in arr:
         # for monotonic decreasing, just flip the > to <
@@ -149,7 +151,7 @@ def fn(arr):
             stack.pop()
         stack.append(num)
 
-    return ans
+    return and
 ```
 
 ### Binary tree: DFS (recursive)
@@ -159,12 +161,12 @@ def dfs(root):
     if not root:
         return
 
-    ans = 0
+    and = 0
 
     # do logic
     dfs(root.left)
     dfs(root.right)
-    return ans
+    return and
 ```
 
 ### Binary tree: DFS (iterative)
@@ -172,7 +174,7 @@ def dfs(root):
 ```py
 def dfs(root):
     stack = [root]
-    ans = 0
+    and = 0
 
     while stack:
         node = stack.pop()
@@ -182,7 +184,7 @@ def dfs(root):
         if node.right:
             stack.append(node.right)
 
-    return ans
+    return and
 ```
 
 ### Binary tree: BFS
@@ -192,7 +194,7 @@ from collections import deque
 
 def fn(root):
     queue = deque([root])
-    ans = 0
+    and = 0
 
     while queue:
         current_length = len(queue)
@@ -206,7 +208,7 @@ def fn(root):
             if node.right:
                 queue.append(node.right)
 
-    return ans
+    return and
 ```
 
 ### Graph: DFS (recursive)
@@ -216,14 +218,14 @@ For the graph templates, assume the nodes are numbered from 0 to n - 1 and the g
 ```py
 def fn(graph):
     def dfs(node):
-        ans = 0
+        and = 0
         # do some logic
         for neighbor in graph[node]:
             if neighbor not in seen:
                 seen.add(neighbor)
-                ans += dfs(neighbor)
+                and += dfs(neighbor)
 
-        return ans
+        return and
 
     seen = {START_NODE}
     return dfs(START_NODE)
@@ -235,7 +237,7 @@ def fn(graph):
 def fn(graph):
     stack = [START_NODE]
     seen = {START_NODE}
-    ans = 0
+    and = 0
 
     while stack:
         node = stack.pop()
@@ -245,7 +247,7 @@ def fn(graph):
                 seen.add(neighbor)
                 stack.append(neighbor)
 
-    return ans
+    return and
 ```
 
 ### Graph: BFS
@@ -256,7 +258,7 @@ from collections import deque
 def fn(graph):
     queue = deque([START_NODE])
     seen = {START_NODE}
-    ans = 0
+    and = 0
 
     while queue:
         node = queue.popleft()
@@ -266,7 +268,7 @@ def fn(graph):
                 seen.add(neighbor)
                 queue.append(neighbor)
 
-    return ans
+    return and
 ```
 
 ### Find top k elements with heap
@@ -387,13 +389,13 @@ def backtrack(curr, OTHER_ARGUMENTS...):
         # modify the answer
         return
 
-    ans = 0
+    and = 0
     for (ITERATE_OVER_INPUT):
         # modify the current state
-        ans += backtrack(curr, OTHER_ARGUMENTS...)
+        and += backtrack(curr, OTHER_ARGUMENTS...)
         # undo the modification of the current state
 
-    return ans
+    return and
 ```
 
 ### Dynamic programming: top-down memoization
@@ -407,14 +409,13 @@ def fn(arr):
         if STATE in memo:
             return memo[STATE]
 
-        ans = RECURRENCE_RELATION(STATE)
-        memo[STATE] = ans
-        return ans
+        and = RECURRENCE_RELATION(STATE)
+        memo[STATE] = and
+        return and
 
     memo = {}
     return dp(STATE_FOR_WHOLE_INPUT)
 ```
-
 
 To convert a top-down solution to a bottom-up one:
 
@@ -427,8 +428,6 @@ To convert a top-down solution to a bottom-up one:
 4. Now, each iteration of the inner-most loop represents a given state, and is equivalent to a function call to the same state in top-down. Copy-paste the logic from your function into the for-loop and change the function calls to accessing your array. All `dp(...)` changes into `dp[...]`.
 
 5. We're done! `dp` is now an array populated with the answer to the original problem for all possible states. Return the answer to the original problem, by changing `return dp(...)` to `return dp[...]`.
-
-
 
 ```py
 def fn(arr, k):
@@ -526,10 +525,10 @@ After introductions, your interviewer will give you a problem statement. If you'
 - Make sure you fully understand the problem. After the interviewer has read the problem over, confirm what the problem is asking by paraphrasing it back to them.
 
 - Ask clarifying questions regarding the input, for example:
-    - Will the input only have integers, or could there be other types?
-    - Will the input be sorted or unsorted?
-    - Is the input guaranteed to have elements or could it be empty?
-    - What should I do if an invalid input is given?
+  - Will the input only have integers, or could there be other types?
+  - Will the input be sorted or unsorted?
+  - Is the input guaranteed to have elements or could it be empty?
+  - What should I do if an invalid input is given?
 
 - Ask about the expected input size. Sometimes, the interviewer will be vague, but if they do give you a range, it can be a clue. For example, if `n` is very small, it is likely backtracking. If `n` is around `100 - 1000`, an `O(n²)` solution might be optimal. If `n` is very large, then you might need to do better than `O(n)`.
 
@@ -570,19 +569,19 @@ One strategy is to first implement a brute force solution **while acknowledging*
 Once you have finished coding, your interviewer will likely want to test your code. Depending on the company, there are a few different environments your interview might be taking place in:
 
 - Built-in test cases, code is run
-    - These platforms are similar to LeetCode. There will be a wide variety of test cases - small inputs, huge inputs, inputs that test edge cases.
-    - This environment puts the most stress on your code because a non-perfect solution will be exposed.
+  - These platforms are similar to LeetCode. There will be a wide variety of test cases - small inputs, huge inputs, inputs that test edge cases.
+  - This environment puts the most stress on your code because a non-perfect solution will be exposed.
     However, it also puts the least stress on creating your own tests, since they are already built-in.
 
 - Write your own test cases, code is run
-    - These platforms are usually shared text editors that support running code. The interviewer will want you to write your own test cases.
-    - To actually test the code, you should write in the outermost scope of the code, wherever the code will get run first. Assuming you solved the problem in a function (like on LeetCode), you can call your function with the test cases you wrote and print the results to the console.
-    - When writing your own tests, make sure to try a variety. Include edge cases, intuitive inputs, and possibly invalid inputs (if the interviewer wants you to handle that case).
+  - These platforms are usually shared text editors that support running code. The interviewer will want you to write your own test cases.
+  - To actually test the code, you should write in the outermost scope of the code, wherever the code will get run first. Assuming you solved the problem in a function (like on LeetCode), you can call your function with the test cases you wrote and print the results to the console.
+  - When writing your own tests, make sure to try a variety. Include edge cases, intuitive inputs, and possibly invalid inputs (if the interviewer wants you to handle that case).
 
 - Write your own test cases, code is not run
-    - These platforms will just be shared text editors that do not support running code. The interviewer will want you to write your own test cases and walk through them manually.
-    - To "test" the code, you will have to go through the algorithm manually with each test case. Try to condense trivial parts - for example, if you're creating a prefix sum, don't literally walk through the for loop with every element. Say something along the lines of "after this for loop, we will have a prefix sum which will look like ...".
-    - As you are walking through the code, write (in the editor, outside your function somewhere) the variables used in the function and continuously update them.
+  - These platforms will just be shared text editors that do not support running code. The interviewer will want you to write your own test cases and walk through them manually.
+  - To "test" the code, you will have to go through the algorithm manually with each test case. Try to condense trivial parts - for example, if you're creating a prefix sum, don't literally walk through the for loop with every element. Say something along the lines of "after this for loop, we will have a prefix sum which will look like ...".
+  - As you are walking through the code, write (in the editor, outside your function somewhere) the variables used in the function and continuously update them.
 
 Regardless of the scenario, if it turns out your code has an error, don't panic! If the environment supports running code, put print statements in relevant locations to try to identify the issue. Walk through a test case manually (as you would if you have an environment without runtime support) with a small test case. As you do it, talk about what the expected values of the variables should be and compare them with what they actually are. Again, the more vocal you are, the easier it is for the interviewer to help you.
 
@@ -591,12 +590,12 @@ Regardless of the scenario, if it turns out your code has an error, don't panic!
 After coding the algorithm and running through test cases, be prepared to answer questions regarding your algorithm. Questions you should always expect and be ready for include:
 
 - What is the time and space complexity of the algorithm?
-    - You should speak in terms of the worst-case scenario. However, if the worst case is rare and the average case has a significantly faster runtime, you should also mention this.
+  - You should speak in terms of the worst-case scenario. However, if the worst case is rare and the average case has a significantly faster runtime, you should also mention this.
 - Why did you choose to do ...?
-    - This could be your choice of data structure, choice of algorithm, choice of for loop configurations, etc. Be prepared to explain your thought process.
+  - This could be your choice of data structure, choice of algorithm, choice of for loop configurations, etc. Be prepared to explain your thought process.
 - Do you think that the algorithm could be improved in terms of time or space complexity?
-    - If the problem needs to look at every element in the input (let's say the input isn't sorted and you needed to find the max element), then you probably can't do better than `O(n)`. Otherwise, you probably can't do better than `O(log n)`.
-    - If the interviewer asks this, the answer is usually yes. Be careful about asserting that your algorithm is optimal - it's ok to be wrong, but it's not ok to be confidently wrong.
+  - If the problem needs to look at every element in the input (let's say the input isn't sorted and you needed to find the max element), then you probably can't do better than `O(n)`. Otherwise, you probably can't do better than `O(log n)`.
+  - If the interviewer asks this, the answer is usually yes. Be careful about asserting that your algorithm is optimal - it's ok to be wrong, but it's not ok to be confidently wrong.
 
 If there is time remaining in the interview, you may be asked an entirely new question. In that case, restart from step 2 (Problem statement). However, you may also be asked follow-ups to the question you already solved. The interviewer might introduce new constraints, ask for an improved space complexity, or any other number of things.
 
@@ -620,7 +619,6 @@ Be interested, keep smiling, listen to the interviewer's responses, and ask foll
 If you don't have quality questions or appear bored/uninterested, it could give a bad signal to the interviewer. It doesn't matter how well you did on the technical portion if the interviewer doesn't like you in the end.
 
 ## Cheatsheets
-
 
 This article will be a collection of cheat sheets that you can use as you solve problems and prepare for interviews. You will find:
 
@@ -820,7 +818,6 @@ All major programming languages have a built-in method for sorting. It is usuall
 Here's a flowchart that can help you figure out which data structure or algorithm should be used. Note that this flowchart is very general as it would be impossible to cover every single scenario.
 
 > Note that this flowchart only covers methods taught in LICC, and as such more advanced algorithms like Dijkstra's is excluded.
-
 
 ![Flowchart](docs/dsa_flowchart.png)
 
