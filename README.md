@@ -1,12 +1,4 @@
-# 10kgrind
-
-![10kgrind](docs/10kgrind.png)
-
-## Profiles
-
-- [LeetCode](https://leetcode.com/u/10kgrind/)
-- [CSES](https://cses.fi/user/397111)
-- [Codeforces](https://codeforces.com/profile/10kgrind)
+# Data Structures and Algorithms
 
 ## Notes
 
@@ -77,16 +69,9 @@
 
 ### Utilities
 
-Boolean to check if local environment.
-
-```py
-import os
-DEBUG: bool = os.path.exists("debug.txt")
-```
-
 Decorator to trace functions. Useful for recursive functions.
 
-```py
+```python
 from functools import wraps
 
 def trace(func):
@@ -109,7 +94,7 @@ def trace(func):
 
 Handle memoization with Python's built-in `@cache` decorator. It has no `maxsize` and will grow for as long as the program runs.
 
-```py
+```python
 from functools import cache
 
 @cache
@@ -130,7 +115,7 @@ fib.cache_clear()
 
 Nested list comprehensions can be used to create a matrix with `ROWS` rows and `COLS` columns.
 
-```py
+```python
 matrix = [[0 for _ in range(COLS)] for _ in range(ROWS)]
 visited = [[False for _ in range(COLS)] for _ in range(ROWS)]
 dist = [[float('inf') for _ in range(COLS)] for _ in range(ROWS)]
@@ -140,7 +125,7 @@ table = [[(i + 1) * (j + 1) for j in range(COLS)] for i in range(ROWS)]
 
 Visualizes a 2D grid with row/column indices and fixed-width alignment. The width is the number of characters per cell.
 
-```py
+```python
 def debug_matrix(matrix,width=5):
     if not matrix or not matrix[0]:
         print(f"Empty", file=sys.stderr)
@@ -172,7 +157,7 @@ def debug_matrix(matrix,width=5):
 
 Debug printing for singly-linked list. Detects cycles.
 
-```py
+```python
 def debug_sll(head):
     res = []
     curr = head
@@ -204,7 +189,7 @@ def debug_sll(head):
 
 Print tree structure for debugging.
 
-```py
+```python
 def debug_tree(root):
     lines = []
 
@@ -247,7 +232,7 @@ def debug_tree(root):
 
 Build a tree in level order from an array.
 
-```py
+```python
 def build_tree(arr):
     if not arr:
         return None
