@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+"""IMPORTS"""
+
 import signal
 import atexit
 import os
@@ -10,13 +12,20 @@ import heapq
 from collections import deque, defaultdict, Counter
 import string
 import time
+import random
+import re
 import itertools
 import inspect
 from functools import cache, wraps
 from types import GeneratorType
+from typing import Final
 
-MOD: int = 10**9 + 7
-EPS: float = 1e-9
+"""CONSTANTS"""
+
+MOD: Final[int] = 10**9 + 7
+EPS: Final[float] = 1e-9
+SEED: Final[int] = 69
+random.seed(SEED)
 
 
 class ListNode:
@@ -26,6 +35,32 @@ class ListNode:
 
     def __repr__(self):
         return f"ListNode({self.val})"
+
+    def __str__(self):
+        res = []
+        curr = self
+        seen = set()
+        bound = 25
+
+        while curr:
+            node_id = id(curr)
+            if node_id in seen:
+                res.append(f"Cycle({curr.val})")
+                break
+
+            seen.add(node_id)
+            res.append(str(curr.val))
+            curr = curr.next
+
+            if len(res) >= bound:
+                res.append("...")
+                break
+
+        if not curr and len(res) < bound + 1:
+            res.append("None")
+
+        res = " -> ".join(res)
+        return f"{res}"
 
 
 def _sll(head: ListNode) -> None:
@@ -65,6 +100,45 @@ class TreeNode:
         left_val = self.left.val if self.left else "null"
         right_val = self.right.val if self.right else "null"
         return f"TreeNode({self.val}, L:{left_val}, R:{right_val})"
+
+    def __str__(self):
+        lines = []
+
+        def _build(node, prefix="", is_left=True, is_root=True):
+            if node is None:
+                label = "(L)" if is_left else "(R)"
+                # Using \-- for bottom (left) and /-- for top (right)
+                connector = "\\-- " if is_left else "/-- "
+                lines.append(f"{prefix}{connector}{label} [N]")
+                return
+
+            if node.right or node.left:
+                _build(
+                    node.right,
+                    prefix + ("|       " if is_left and not is_root else "        "),
+                    False,
+                    False,
+                )
+
+            if is_root:
+                connector = "ROOT--- "
+            else:
+                label = "(L)" if is_left else "(R)"
+                connector = "\\-- " if is_left else "/-- "
+                connector += label + " "
+
+            lines.append(f"{prefix}{connector}{node.val}")
+
+            if node.left or node.right:
+                _build(
+                    node.left,
+                    prefix + ("        " if is_left or is_root else "|       "),
+                    True,
+                    False,
+                )
+
+        _build(self)
+        return "\n" + "\n".join(lines) + "\n"
 
 
 def _tree(root: TreeNode) -> None:
@@ -178,6 +252,8 @@ def solve():
     _tree(root)
     _sll(head)
     fib(6)
+    print(root)
+    print(head)
 
 
 def main():
