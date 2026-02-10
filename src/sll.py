@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-from utils import trace, benchmark, report, inspect
-
 
 class ListNode:
     def __init__(self, val=0, next=None):
@@ -12,7 +10,6 @@ class ListNode:
         return f"ListNode({self.val})"
 
 
-@benchmark
 def build_sll(arr):
     dummy = ListNode(0)
     curr = dummy
@@ -22,7 +19,6 @@ def build_sll(arr):
     return dummy.next
 
 
-@benchmark
 def debug_sll(head):
     res = []
     curr = head
