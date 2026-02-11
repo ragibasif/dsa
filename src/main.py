@@ -63,9 +63,9 @@ class ListNode:
         return f"{res}"
 
 
-def _sll(head: ListNode) -> None:
+def _sll(self):
     res = []
-    curr = head
+    curr = self
     seen = set()
     bound = 25
 
@@ -87,7 +87,7 @@ def _sll(head: ListNode) -> None:
         res.append("None")
 
     res = " -> ".join(res)
-    print(f"{res}")
+    return f"{res}"
 
 
 class TreeNode:
