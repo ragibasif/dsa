@@ -5,28 +5,30 @@ def palindrome(s):
     while l <= r:
         if s[l] != s[r]:
             return False
-        l+=1
-        r-=1
+        l += 1
+        r -= 1
     return True
+
 
 # fast and slow pointers
 def smaller_prefixes(arr):
-    n = len(arr) # assume its even and greater than 0
+    n = len(arr)  # assume its even and greater than 0
     sp = 0
     fp = 0
     k = 0
     k2 = 0
-    for _ in range(n//2):
+    for _ in range(n // 2):
         k += arr[sp]
-        k2 += arr[fp] + arr[fp+1]
+        k2 += arr[fp] + arr[fp + 1]
         if not k < k2:
             return False
         sp += 1
         fp += 2
     return True
 
+
 # parallel pointers
-def common_elements(arr1,arr2):
+def common_elements(arr1, arr2):
     # assume they are sorted
     p1 = 0
     p2 = 0
@@ -34,13 +36,14 @@ def common_elements(arr1,arr2):
     while p1 < len(arr1) and p2 < len(arr2):
         if arr1[p1] == arr2[p2]:
             res.append(arr1[p1])
-            p1+=1
-            p2+=1
+            p1 += 1
+            p2 += 1
         elif arr1[p1] < arr2[p2]:
-            p1+=1
+            p1 += 1
         else:
-            p2+=1
+            p2 += 1
     return res
+
 
 # inward pointers
 def palindromic_sentence(s):
@@ -49,13 +52,13 @@ def palindromic_sentence(s):
     r = len(s) - 1
     while l <= r:
         if not s[l].isalpha():
-            l+=1
+            l += 1
         elif not s[r].isalpha():
-            r-=1
+            r -= 1
         else:
             if s[l].lower() == s[r].lower():
-                l+=1
-                r-=1
+                l += 1
+                r -= 1
             else:
                 return False
     return True
@@ -65,24 +68,26 @@ def reverse_case_match(s):
     # assume len is even
     def get_val(c):
         if c.islower():
-            return ord(c) - ord('a')
+            return ord(c) - ord("a")
         else:
-            return ord(c) - ord('A')
+            return ord(c) - ord("A")
+
     low = 0
     upp = len(s) - 1
     while low < len(s) and upp >= 0:
         if not s[low].islower():
-            low+=1
+            low += 1
         elif not s[upp].isupper():
             upp -= 1
         else:
             if not (get_val(s[low]) == get_val(s[upp])):
                 return False
-            low+=1
-            upp-=1
+            low += 1
+            upp -= 1
     return True
 
-def three_merge(arr1,arr2,arr3):
+
+def three_merge(arr1, arr2, arr3):
     # merge three sorted arrays, no duplicates
     seen = set()
     res = []
@@ -113,34 +118,35 @@ def three_merge(arr1,arr2,arr3):
     p3 = 0
     while p1 < len(arr1) and p2 < len(arr2) and p3 < len(arr3):
         if arr1[p1] == float("inf"):
-            p1+=1
+            p1 += 1
         elif arr2[p2] == float("inf"):
-            p2+=1
+            p2 += 1
         elif arr3[p3] == float("inf"):
-            p3+=1
+            p3 += 1
         elif arr1[p1] < arr2[p2] and arr1[p1] < arr3[p3]:
             res.append(arr1[p1])
-            p1+=1
+            p1 += 1
         elif arr2[p2] < arr1[p1] and arr2[p2] < arr3[p3]:
             res.append(arr2[p2])
-            p2+=1
+            p2 += 1
         elif arr3[p3] < arr1[p1] and arr2[p2] > arr3[p3]:
             res.append(arr3[p3])
-            p3+=1
+            p3 += 1
     while p1 < len(arr1):
         if arr1[p1] < float("inf"):
             res.append(arr1[p1])
-        p1+=1
+        p1 += 1
     while p2 < len(arr2):
         if arr2[p2] < float("inf"):
             res.append(arr2[p2])
-        p2+=1
+        p2 += 1
     while p3 < len(arr3):
         if arr3[p3] < float("inf"):
             res.append(arr3[p3])
-        p3+=1
+        p3 += 1
 
     return res
+
 
 def valley(arr):
     if arr[0] < arr[1]:
@@ -152,35 +158,35 @@ def valley(arr):
     while l <= r:
         if arr[l] >= arr[r]:
             res[p] = arr[l]
-            l+=1
+            l += 1
         else:
             res[p] = arr[r]
-            r-=1
-        p-=1
+            r -= 1
+        p -= 1
     return res
 
-def missing(arr,low,high):
+
+def missing(arr, low, high):
     res = []
     lp = 0
-    hp = len(arr)-1
+    hp = len(arr) - 1
     while lp < len(arr) and arr[lp] < low:
-        lp+=1
+        lp += 1
     while hp >= 0 and arr[hp] > high:
-        hp-=1
-    while lp <= hp and low <=high:
+        hp -= 1
+    while lp <= hp and low <= high:
         if arr[lp] == low:
-            lp+=1
+            lp += 1
         else:
             res.append(low)
-        low+=1
-    while low<=high:
+        low += 1
+    while low <= high:
         res.append(low)
-        low+=1
+        low += 1
 
     return res
 
 
-print(missing([6,9,12,15,18],9,13))
-print(missing([],9,9))
-print(missing([6,7,8,9],7,8))
-
+print(missing([6, 9, 12, 15, 18], 9, 13))
+print(missing([], 9, 9))
+print(missing([6, 7, 8, 9], 7, 8))

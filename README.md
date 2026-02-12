@@ -1,38 +1,10 @@
 # Data Structures and Algorithms
 
-## Notes
+Data structures and algorithm notes.
 
-### Bit Manipulation
+**For educational and recreational purposes only.**
 
-- Get i-th bit: `(x >> i) & 1`
-- Set i-th bit: `x | (1 << i)`
-- Clear i-th bit: `x & ~(1 << i)`
-- Check if power of 2: `n > 0 and (n & (n - 1)) == 0`
-- XOR Property: `a ^ a = 0`, `a ^ b = 1` if a != b
-- Check if even number: `( n & 1 ) == 0`
-- Check if odd number: `( n & 1 ) == 1`
-- Clear the lowest set bit: `n & (n - 1)`
-- Get the lowest set bit: `n & -n`
-
-### Math
-
-- Sum of first `n` natural numbers: `( n * ( n + 1 ) ) // 2`
-- Sum of first `n` odd natural numbers: `n * n`
-- Sum of first `n` even natural numbers: `n * (n + 1)`
-- Even number: `n = 2k`
-- Odd number: `n = 2k + 1`
-
-### NP-Complete
-
-- NP-Complete Problems:
-  - Traveling Salesperson Problem (TSP)
-  - Longest Path Problem
-  - Hamiltonian Path Problem
-  - Graph Coloring Problem
-  - The Knapsack Problem
-  - Subset Sum Problem
-
-### Python
+## Python
 
 - Strings are immutable and that's why they can be used as keys to dictionaries
 - Use `''.join(list_of_strings)` instead of repeated `s += char` since that will create new copies of the string
@@ -67,9 +39,487 @@
 - Integer Square Root: `math.isqrt(n)` is faster than `int(n**0.5)`
 - Reverse a list: `list[::-1]`
 
+### List (Dynamic Array)
+
+```python
+nums = [1,2,3]
+
+# Common Operations
+nums.index(1)      # Find index
+nums.append(1)     # Add to end
+nums.insert(0,10)  # Add 10 from left (at index 0 which is start)
+nums.remove(3)     # Remove value
+nums.pop()         # Remove & return last element
+nums.sort()        # In-place sort (TimSort: O(n log n))
+nums.reverse()     # In-place reverse
+nums.copy()        # Return shallow copy
+
+# List Slicing
+nums[start:stop:step]  # Generic slice syntax
+nums[-1]    # Last item
+nums[::-1]  # Reverse list
+nums[1:]    # Everything after index 1
+nums[:3]    # First three elements
+```
+
+### 2D Arrays
+
+Nested list comprehensions can be used to create a matrix with `ROWS` rows and `COLS` columns.
+
+```python
+matrix = [[0 for _ in range(COLS)] for _ in range(ROWS)]
+visited = [[False for _ in range(COLS)] for _ in range(ROWS)]
+dist = [[float('inf') for _ in range(COLS)] for _ in range(ROWS)]
+grid = [[(r * COLS + c) for c in range(COLS)] for r in range(ROWS)]
+table = [[(i + 1) * (j + 1) for j in range(COLS)] for i in range(ROWS)]
+```
+
+### Singly-linked Lists
+
+```python
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+    def __repr__(self):
+        return f"ListNode({self.val})"
+
+    def __str__(self):
+        res = []
+        curr = self
+        seen = set()
+        bound = 25
+
+        while curr:
+            node_id = id(curr)
+            if node_id in seen:
+                res.append(f"Cycle({curr.val})")
+                break
+
+            seen.add(node_id)
+            res.append(str(curr.val))
+            curr = curr.next
+
+            if len(res) >= bound:
+                res.append("...")
+                break
+
+        if not curr and len(res) < bound + 1:
+            res.append("None")
+
+        res = " -> ".join(res)
+        return f"{res}"
+```
+
+### Trees
+
+```python
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+    def __repr__(self):
+        left_val = self.left.val if self.left else "null"
+        right_val = self.right.val if self.right else "null"
+        return f"TreeNode({self.val}, L:{left_val}, R:{right_val})"
+
+    def __str__(self):
+        lines = []
+
+        def _build(node, prefix="", is_left=True, is_root=True):
+            if node is None:
+                label = "(L)" if is_left else "(R)"
+                # Using \-- for bottom (left) and /-- for top (right)
+                connector = "\\-- " if is_left else "/-- "
+                lines.append(f"{prefix}{connector}{label} [N]")
+                return
+
+            if node.right or node.left:
+                _build(
+                    node.right,
+                    prefix + ("|       " if is_left and not is_root else "        "),
+                    False,
+                    False,
+                )
+
+            if is_root:
+                connector = "ROOT--- "
+            else:
+                label = "(L)" if is_left else "(R)"
+                connector = "\\-- " if is_left else "/-- "
+                connector += label + " "
+
+            lines.append(f"{prefix}{connector}{node.val}")
+
+            if node.left or node.right:
+                _build(
+                    node.left,
+                    prefix + ("        " if is_left or is_root else "|       "),
+                    True,
+                    False,
+                )
+
+        _build(self)
+        return "\n" + "\n".join(lines) + "\n"
+```
+
+### Dictionary (Hash Map)
+
+```python
+d = {'a':1, 'b':2}
+
+# Essential Operations
+d.get('key', default)     # Safe access with default
+d.setdefault('key', 0)    # Set if missing
+d.items()                 # Key-value pairs
+d.keys()                  # Just keys
+d.values()               # Just values
+d.pop(key)              # Remove and return value
+d.update({key: value})  # Batch update
+
+# Advanced Usage
+from collections import defaultdict
+d = defaultdict(list)     # Auto-initialize missing keys
+d = defaultdict(int)      # Useful for counting
+```
+
+### Counter (Frequency Map)
+
+```python
+from collections import Counter
+
+# Initialize
+c = Counter(['a','a','b'])    # From iterable
+c = Counter("hello")          # From string
+
+# Operations
+c.most_common(2)      # Top 2 frequent elements
+c['a'] += 1           # Increment count
+c.update("more")      # Add counts from iterable
+c.total()             # Sum of all counts
+c.elements()          # Returns an iterator over elements repeating
+c.subtract("ole")     # Subtract counts from iterable (can go negative)
+```
+
+### Deque (Double-ended Queue)
+
+```python
+from collections import deque
+
+# Perfect for BFS - O(1) operations on both ends
+d = deque()
+d.append(1)          # Add right
+d.appendleft(2)      # Add left
+d.pop()              # Remove right
+d.popleft()          # Remove left
+d.extend([1,2,3])    # Extend right
+d.extendleft([1,2,3])# Extend left
+d.rotate(n)          # Rotate n steps right (negative for left)
+```
+
+### Heapq (Priority Queue)
+
+```python
+import heapq
+
+# MinHeap Operations - All O(log n) except heapify
+nums = [3,1,4,1,5]
+heapq.heapify(nums)          # Convert to heap in-place: O(n)
+heapq.heappush(nums, 2)      # Add element: O(log n)
+smallest = heapq.heappop(nums)  # Remove smallest: O(log n)
+
+# MaxHeap Trick: Multiply by -1
+nums = [-x for x in nums]    # Convert to maxheap: O(n)
+heapq.heapify(nums)          # O(n)
+largest = -heapq.heappop(nums)  # Get largest: O(log n)
+
+# Advanced Operations
+k_largest = heapq.nlargest(k, nums)    # O(n * log k)
+k_smallest = heapq.nsmallest(k, nums)  # O(n * log k)
+
+# Custom Priority Queue
+heap = []
+heapq.heappush(heap, (priority, item))  # Sort by priority
+```
+
+### Set (Hash Set)
+
+```python
+s = {1,2,3}
+
+# Common Operations
+s.add(4)             # Add element
+s.remove(4)          # Remove (raises error if missing)
+s.discard(4)         # Remove (no error if missing)
+s.pop()              # Remove and return arbitrary element
+
+# Set Operations
+a.union(b)           # Elements in a OR b
+a.intersection(b)    # Elements in a AND b
+a.difference(b)      # Elements in a but NOT in b
+a.symmetric_difference(b)  # Elements in a OR b but NOT both
+a.issubset(b)        # True if all elements of a are in b
+a.issuperset(b)      # True if all elements of b are in a
+```
+
+### Tuples
+
+```python
+# Tuples are immutable lists
+t = (1, 2, 3, 1)
+
+# Essential Operations
+t.count(1)      # Count occurrences of value
+t.index(2)      # Find first index of value
+
+# Useful Patterns
+x, y = (1, 2)   # Tuple unpacking
+coords = [(1,2), (3,4)]  # Tuple in collections
+```
+
+### Strings
+
+```python
+s = "hello world"
+
+# Essential Methods
+s.split()            # Split on whitespace
+s.split(',')         # Split on comma
+s.strip()            # Remove leading/trailing whitespace
+s.lower()            # Convert to lowercase
+s.upper()            # Convert to uppercase
+s.isalnum()          # Check if alphanumeric
+s.isalpha()          # Check if alphabetic
+s.isdigit()          # Check if all digits
+s.find('sub')        # Index of substring (-1 if not found)
+s.count('sub')       # Count occurrences
+s.replace('old', 'new')  # Replace all occurrences
+
+# ASCII Conversion
+ord('a')             # Char to ASCII (97)
+chr(97)              # ASCII to char ('a')
+
+# Join Lists
+''.join(['a','b'])   # Concatenate list elements
+```
+
+### Built-in Functions
+
+```python
+# Iteration Helpers
+enumerate(lst)        # Index + value pairs
+zip(lst1, lst2)      # Parallel iteration
+map(fn, lst)         # Apply function to all elements
+filter(fn, lst)      # Keep elements where fn returns True
+any(lst)             # True if any element is True
+all(lst)             # True if all elements are True
+
+# Binary Search (import bisect)
+bisect.bisect(lst, x)     # Find insertion point
+bisect.bisect_left(lst, x)# Find leftmost insertion point
+bisect.insort(lst, x)     # Insert maintaining sort
+
+# Type Conversion
+int('42')            # String to int
+str(42)              # Int to string
+list('abc')          # String to list
+''.join(['a','b'])   # List to string
+set([1,2,2])         # List to set
+
+# Math
+abs(-5)              # Absolute value
+pow(2, 3)            # Power
+round(3.14159, 2)    # Round to decimals
+```
+
+### Custom Sorting with `cmp_to_key`
+
+```python
+from functools import cmp_to_key
+
+def compare(item1, item2):
+    # Return -1: item1 comes first
+    # Return 1:  item2 comes first
+    # Return 0:  items are equal
+    if item1 < item2:
+        return -1
+    elif item1 > item2:
+        return 1
+    return 0
+
+# Sort using custom comparison
+sorted_list = sorted(items, key=cmp_to_key(compare))
+```
+
+### Taking Multiple Inputs
+
+```python
+# Basic multiple input
+x, y = input("Enter two values: ").split()
+
+# Multiple integers
+x, y = map(int, input("Enter two numbers: ").split())
+
+# List of integers
+nums = list(map(int, input("Enter numbers: ").split()))
+
+# Multiple inputs with custom separator
+values = input("Enter comma-separated values: ").split(',')
+
+# List comprehension method
+x, y = [int(x) for x in input("Enter two numbers: ").split()]
+```
+
+### Math Module Essentials
+
+```python
+import math
+
+# Constants
+math.pi       # 3.141592653589793
+math.e        # 2.718281828459045
+
+# Common Functions
+math.ceil(2.3)        # 3 - Smallest integer greater than x
+math.floor(2.3)       # 2 - Largest integer less than x
+math.gcd(a, b)        # Greatest common divisor
+math.log(x, base)     # Logarithm with specified base
+math.sqrt(x)          # Square root
+math.pow(x, y)        # x^y (prefer x ** y for integers)
+
+# Trigonometry
+math.degrees(rad)     # Convert radians to degrees
+math.radians(deg)     # Convert degrees to radians
+```
+
+### Important Python Integer Operations
+
+```python
+# Binary representation
+bin(10)              # '0b1010'
+format(10, 'b')      # '1010' (without prefix)
+
+# Division and Modulo
+divmod(10, 3)        # (3, 1) - returns (quotient, remainder)
+
+# Negative number handling
+x = -3
+y = 2
+print(x // y)        # -2 (floor division)
+print(int(x/y))      # -1 (preferred for negative numbers)
+print(x % y)         # 1 (Python's modulo with negative numbers)
+```
+
+### Tips & Gotchas
+
+Integer Division:
+
+```python
+# Use int() for consistent negative number handling
+print(-3//2)        # Returns -2
+print(int(-3/2))    # Returns -1 (usually desired)
+```
+
+Default Dictionaries:
+
+```python
+# Prefer defaultdict for frequency counting
+from collections import defaultdict
+freq = defaultdict(int)
+for x in lst:
+    freq[x] += 1    # No KeyError if x is new
+```
+
+Heap Priority:
+
+```python
+# For custom priority in heapq, use tuples
+heap = []
+heapq.heappush(heap, (priority, item))
+```
+
+List Comprehension:
+
+```python
+# Often clearer than map/filter
+squares = [x*x for x in range(10) if x % 2 == 0]
+```
+
+String Building:
+
+```python
+# Use join() instead of += for strings
+chars = ['a', 'b', 'c']
+word = ''.join(chars)  # More efficient
+```
+
+Using Sets for Efficiency:
+
+```python
+# O(1) lookup for contains operations
+seen = set()
+if x in seen:  # Much faster than list lookup
+    print("Found!")
+```
+
+Custom Sort Keys:
+
+```python
+# Sort by length then alphabetically
+words.sort(key=lambda x: (len(x), x))
+```
+
+Default Arguments Warning:
+
+```python
+# Don't use mutable defaults
+def bad(lst=[]):     # This can cause bugs
+    lst.append(1)
+    return lst
+
+def good(lst=None):  # Do this instead
+    if lst is None:
+        lst = []
+    lst.append(1)
+    return lst
+```
+
+### Bit Manipulation
+
+- Get i-th bit: `(x >> i) & 1`
+- Set i-th bit: `x | (1 << i)`
+- Clear i-th bit: `x & ~(1 << i)`
+- Check if power of 2: `n > 0 and (n & (n - 1)) == 0`
+- XOR Property: `a ^ a = 0`, `a ^ b = 1` if a != b
+- Check if even number: `( n & 1 ) == 0`
+- Check if odd number: `( n & 1 ) == 1`
+- Clear the lowest set bit: `n & (n - 1)`
+- Get the lowest set bit: `n & -n`
+
+### Math
+
+- Sum of first `n` natural numbers: `( n * ( n + 1 ) ) // 2`
+- Sum of first `n` odd natural numbers: `n * n`
+- Sum of first `n` even natural numbers: `n * (n + 1)`
+- Even number: `n = 2k`
+- Odd number: `n = 2k + 1`
+
+### NP-Complete
+
+- NP-Complete Problems:
+  - Traveling Salesperson Problem (TSP)
+  - Longest Path Problem
+  - Hamiltonian Path Problem
+  - Graph Coloring Problem
+  - The Knapsack Problem
+  - Subset Sum Problem
+
 ### Utilities
 
-Decorator to trace functions. Useful for recursive functions.
+Decorator to trace recursive functions.
 
 ```python
 from functools import wraps
@@ -92,6 +542,22 @@ def trace(func):
     return wrapper
 ```
 
+```python
+def timer(func):
+    """Decorator to time functions."""
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start = time.perf_counter()
+        result = func(*args, **kwargs)
+        end = time.perf_counter()
+        duration = end - start
+        print(f"[{func.__name__}] {duration:.4f}s ({duration * 1000:.2f}ms)")
+        return result
+
+    return wrapper
+```
+
 Handle memoization with Python's built-in `@cache` decorator. It has no `maxsize` and will grow for as long as the program runs.
 
 ```python
@@ -110,20 +576,6 @@ print(info)
 # Deletes all cached results and resets statistics.
 fib.cache_clear()
 ```
-
-### 2D Arrays
-
-Nested list comprehensions can be used to create a matrix with `ROWS` rows and `COLS` columns.
-
-```python
-matrix = [[0 for _ in range(COLS)] for _ in range(ROWS)]
-visited = [[False for _ in range(COLS)] for _ in range(ROWS)]
-dist = [[float('inf') for _ in range(COLS)] for _ in range(ROWS)]
-grid = [[(r * COLS + c) for c in range(COLS)] for r in range(ROWS)]
-table = [[(i + 1) * (j + 1) for j in range(COLS)] for i in range(ROWS)]
-```
-
-## Python
 
 ## Code Templates
 
