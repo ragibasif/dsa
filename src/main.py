@@ -18,6 +18,26 @@ import inspect
 from functools import cache, wraps
 from types import GeneratorType
 from typing import Final
+import logging
+
+logging.basicConfig(level=logging.DEBUG, format="[%(filename)s:%(lineno)d] %(message)s")
+logger = logging.getLogger(__name__)
+
+
+def log(*args):
+    frame = inspect.currentframe().f_back
+    var_names = inspect.getframeinfo(frame).code_context[0].strip()
+
+    # Extract variable names from the log() call
+
+    match = re.search(r"log\((.*)\)", var_names)
+    if match:
+        names = [n.strip() for n in match.group(1).split(",")]
+        for name, value in zip(names, args):
+            logger.debug(f"{name} = {value}")
+    else:
+        for i, value in enumerate(args):
+            logger.debug(f"arg{i} = {value}")
 
 
 MOD: Final[int] = 10**9 + 7
@@ -59,6 +79,93 @@ def timer(func):
     return wrapper
 
 
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+    def __repr__(self):
+        return f"ListNode({self.val})"
+
+    def __str__(self):
+        res = []
+        curr = self
+        seen = set()
+        bound = 25
+
+        while curr:
+            node_id = id(curr)
+            if node_id in seen:
+                res.append(f"Cycle({curr.val})")
+                break
+
+            seen.add(node_id)
+            res.append(str(curr.val))
+            curr = curr.next
+
+            if len(res) >= bound:
+                res.append("...")
+                break
+
+        if not curr and len(res) < bound + 1:
+            res.append("None")
+
+        res = " -> ".join(res)
+        return f"{res}"
+
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+    def __repr__(self):
+        left_val = self.left.val if self.left else "null"
+        right_val = self.right.val if self.right else "null"
+        return f"TreeNode({self.val}, L:{left_val}, R:{right_val})"
+
+    def __str__(self):
+        lines = []
+
+        def _build(node, prefix="", is_left=True, is_root=True):
+            if node is None:
+                label = "(L)" if is_left else "(R)"
+                # Using \-- for bottom (left) and /-- for top (right)
+                connector = "\\-- " if is_left else "/-- "
+                lines.append(f"{prefix}{connector}{label} [N]")
+                return
+
+            if node.right or node.left:
+                _build(
+                    node.right,
+                    prefix + ("|       " if is_left and not is_root else "        "),
+                    False,
+                    False,
+                )
+
+            if is_root:
+                connector = "ROOT--- "
+            else:
+                label = "(L)" if is_left else "(R)"
+                connector = "\\-- " if is_left else "/-- "
+                connector += label + " "
+
+            lines.append(f"{prefix}{connector}{node.val}")
+
+            if node.left or node.right:
+                _build(
+                    node.left,
+                    prefix + ("        " if is_left or is_root else "|       "),
+                    True,
+                    False,
+                )
+
+        _build(self)
+        return "\n" + "\n".join(lines) + "\n"
+
+
+@timer
 @trace
 @cache
 def fib(n):
@@ -67,7 +174,10 @@ def fib(n):
     return fib(n - 1) + fib(n - 2)
 
 
-@timer
+def interval(arr1, arr2):
+    pass
+
+
 def solve():
     """
     Read single integer:
@@ -83,7 +193,13 @@ def solve():
     R, C = map(int, input().split())
     grid = [input().strip() for _ in range(R)]
     """
-    fib(6)
+    x = 42
+    y = [1, 2, 3]
+    z = "hello"
+
+    log(x)
+    log(x, y, z)
+    log(100)
 
 
 def main():

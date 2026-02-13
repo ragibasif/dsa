@@ -124,41 +124,6 @@ class TestCaseGenerator:
         return "\n".join(separator.join(map(str, row)) for row in matrix)
 
 
-# Example usage
 if __name__ == "__main__":
     gen = TestCaseGenerator(seed=42)
-
-    print("=== Random Integers ===")
     print(gen.random_integers(10, 1, 10))
-
-    print("\n=== Random Floats ===")
-    print(gen.random_floats(5, 1.0, 10.0))
-
-    print("\n=== Random Permutation ===")
-    print(gen.random_permutation(10))
-
-    print("\n=== Random Matrix ===")
-    print(gen.format_matrix(gen.random_matrix(5, a=1, b=10)))
-
-    print("\n=== Random Matrix (Zero Diagonal) ===")
-    print(gen.format_matrix(gen.random_matrix_zero_diagonal(4)))
-
-    print("\n=== Symmetric Matrix ===")
-    print(gen.format_matrix(gen.random_symmetric_matrix(4)))
-
-    print("\n=== Random Tree (Shallow) ===")
-    print(gen.random_tree(10, depth="shallow"))
-
-    print("\n=== Random Tree (Deep) ===")
-    print(gen.random_tree(10, depth="deep"))
-
-    print("\n=== Random Graph ===")
-    print(gen.random_graph(6))
-
-    print("\n=== Random Connected Graph ===")
-    print(gen.random_graph(6, connected=True))
-
-    print("\n=== Random Strings ===")
-    print(gen.random_string(15))
-    print(gen.random_string_uppercase(10))
-    print(gen.random_string_alphanumeric(12))
