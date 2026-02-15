@@ -1,8 +1,6 @@
-# Data Structures and Algorithms
+# l33t
 
-Data structures and algorithm notes.
-
-**For educational and recreational purposes only.**
+For educational and recreational purposes only.
 
 ## Python
 
