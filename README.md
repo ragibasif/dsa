@@ -100,6 +100,7 @@ def in_bounds(r, c, rows, cols):
 
 # Directions
 
+"""
 4-dir adjacent: the + shape      →  (±1,0), (0,±1) -> one of dr or dc is 0
 4-dir diagonal: the x shape      →  (±1,±1)        -> both dr and dc are nonzero
 8-dir:          the 3x3 grid     →  all combos of {-1,0,1} × {-1,0,1} except (0,0)
@@ -108,6 +109,7 @@ King:           8-dir, 1 step
 Queen:          8-dir, infinite steps (while in bounds)
 Rook:           4-dir adjacent, infinite steps
 Bishop:         4-dir diagonal, infinite steps
+"""
 
 # 4 Directions
 
@@ -154,7 +156,7 @@ for dr, dc in queen:
 ```
 
 - Technique:
-    - check if valid after calculating the new row and column
+    - check if in bounds after calculating the new row and column
 - Bugs:
     - out-of-bounds errors
 
