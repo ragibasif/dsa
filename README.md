@@ -36,6 +36,7 @@ For educational and recreational purposes only.
 - Permutations: `itertools.permutations([1,2,3])`
 - Integer Square Root: `math.isqrt(n)` is faster than `int(n**0.5)`
 - Reverse a list: `list[::-1]`
+- `defaultdict` default infinity: `d = defaultdict(lambda: math.inf)`
 
 ### Bit Manipulation
 
@@ -66,3 +67,95 @@ For educational and recreational purposes only.
   - Graph Coloring Problem
   - The Knapsack Problem
   - Subset Sum Problem
+
+### Two Pointers
+
+- Input:
+    - one or two arrays, strings, linked lists
+    - sorted input
+    - modify input in place
+- Algorithm:
+    - use `O(1)` extra memory
+    - naive solution: `O(n²)` time
+    - optimal solution: `O(n)` time
+- Technique:
+    - inward pointers
+    - slow and fast pointers
+    - parallel pointers
+- Keywords:
+    - palindrome
+    - reverse
+    - swap
+    - merge
+    - partition
+- Bugs:
+    - off by one errors
+
+### 2D Arrays (Grids & Matrices)
+
+```python
+
+def in_bounds(r, c, rows, cols):
+    return 0 <= r < rows and 0 <= c < cols
+
+# Directions
+
+4-dir adjacent: the + shape      →  (±1,0), (0,±1) -> one of dr or dc is 0
+4-dir diagonal: the x shape      →  (±1,±1)        -> both dr and dc are nonzero
+8-dir:          the 3x3 grid     →  all combos of {-1,0,1} × {-1,0,1} except (0,0)
+Knight:         L = 2+1 squares  →  all combos of {±1,±2} × {±2,±1}  (|dr|+|dc|==3, dr≠dc)
+King:           8-dir, 1 step
+Queen:          8-dir, infinite steps (while in bounds)
+Rook:           4-dir adjacent, infinite steps
+Bishop:         4-dir diagonal, infinite steps
+
+# 4 Directions
+
+adjacent = [(-1,0),(1,0),(0,-1),(0,1)] # +
+
+diagonal = [(-1,-1),(-1,1),(1,-1),(1,1)] # x
+
+# 8 Directions
+
+dirs = [(-1,-1),(-1,0),(-1,1),
+        ( 0,-1),        (0,1),
+        ( 1,-1),( 1,0),( 1,1)]
+
+# Or compact:
+dirs = [(dr,dc) for dr in range(-1,2) for dc in range(-1,2) if (dr,dc) != (0,0)]
+
+for dr, dc in dirs:
+    nr, nc = r + dr, c + dc
+
+# Knight
+
+knight = [(-2,-1),(-2,1),(-1,-2),(-1,2),
+          ( 1,-2),( 1,2),( 2,-1),( 2, 1)]
+
+for (int dr = -2; dr <= 2; dr++)
+    for (int dc = -2; dc <= 2; dc++)
+        if (abs(dr) + abs(dc) == 3 && abs(dr) != abs(dc))
+            // valid knight move
+
+for dr, dc in knight:
+    nr, nc = r + dr, c + dc
+
+king = [(dr,dc) for dr in range(-1,2) for dc in range(-1,2) if (dr,dc) != (0,0)]
+
+queen = [(dr,dc) for dr in range(-1,2) for dc in range(-1,2) if (dr,dc) != (0,0)]
+
+for dr, dc in queen:
+    nr, nc = r + dr, c + dc
+    while 0 <= nr < ROWS and 0 <= nc < COLS:
+        # process cell
+        nr += dr
+        nc += dc
+
+```
+
+- Technique:
+    - check if valid after calculating the new row and column
+- Bugs:
+    - out-of-bounds errors
+
+
